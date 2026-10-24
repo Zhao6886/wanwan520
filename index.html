@@ -83,17 +83,49 @@ h2{
 /* ---------- 信 ---------- */
 .letter{display:flex;flex-direction:column;align-items:center;gap:22px;padding:0 var(--pad) 74px}
 .paper{
-  width:100%;max-width:760px;background:var(--card);border-radius:6px;
-  padding:32px 24px 26px;box-shadow:0 10px 30px rgba(45,42,38,.075);
+  position:relative;width:100%;max-width:740px;background:var(--card);border-radius:7px;
+  padding:40px 38px 32px 54px;box-shadow:0 14px 38px rgba(45,42,38,.085);
+  background-image:repeating-linear-gradient(to bottom,
+    rgba(201,169,138,.11) 0 1px, transparent 1px 33.5px);
+  background-position:0 26px;
 }
+.paper::before{
+  content:'';position:absolute;left:36px;top:24px;bottom:24px;width:1px;
+  background:repeating-linear-gradient(to bottom,
+    rgba(181,105,94,.34) 0 5px, transparent 5px 12px);
+}
+/* 邮票 */
+.stamp{
+  position:absolute;top:-18px;right:30px;width:76px;height:90px;background:#FBF6EC;
+  border:1px dashed rgba(160,138,116,.55);border-radius:3px;transform:rotate(-4.5deg);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
+  box-shadow:0 10px 20px rgba(45,42,38,.12);
+}
+.stamp-date{font-family:var(--handen);font-size:25px;line-height:1;color:#A07856}
+.stamp-note{font-size:9px;letter-spacing:.06em;color:#B3A18B}
 .greet{
-  margin:0;font-family:var(--handcn);font-size:26px;line-height:1.6;color:var(--ink);
+  margin:0;font-family:var(--handcn);font-size:30px;line-height:1.55;color:var(--ink);
 }
-.paper p{margin:16px 0 0;font-size:16px;line-height:2.05;color:var(--ink2)}
-.paper .ps{font-size:13.5px;color:var(--muted2);line-height:1.9}
-.sign{text-align:right;margin-top:26px}
-.sign b{display:block;font-family:var(--handcn);font-weight:400;font-size:26px;line-height:1.4;color:var(--rose)}
-.sign small{display:block;margin-top:4px;font-size:11px;letter-spacing:.16em;color:var(--faint)}
+.greet-en{
+  margin:4px 0 22px;font-family:var(--handen);font-size:17px;line-height:1.4;color:#B99A86;
+}
+.paper p{margin:0 0 17px;font-size:16px;line-height:2.08;color:var(--ink2);text-align:justify}
+.paper p:last-of-type{margin-bottom:0}
+.closing{
+  display:flex;flex-direction:column;align-items:center;gap:12px;
+  margin:30px 0 0 !important;text-align:center !important;
+}
+.closing span{font-family:var(--handcn);font-size:21px;line-height:1.8;color:var(--rose)}
+.closing svg{display:block}
+.sign{display:flex;align-items:flex-end;justify-content:flex-end;gap:12px;margin-top:26px}
+.sign-rose{flex:0 0 auto;margin-bottom:2px}
+.sign b{display:block;font-family:var(--handcn);font-weight:400;font-size:27px;line-height:1.35;color:var(--rose)}
+.sign small{display:block;margin-top:3px;font-size:11px;letter-spacing:.16em;color:var(--faint)}
+.paper-fold{
+  position:absolute;right:0;bottom:0;width:44px;height:44px;pointer-events:none;
+  background:linear-gradient(135deg,rgba(250,246,240,0) 50%,rgba(233,220,198,.9) 50%);
+  border-radius:0 0 7px 0;
+}
 
 /* ---------- 起点 ---------- */
 .beginning{display:flex;flex-direction:column;align-items:center;gap:10px;padding:0 var(--pad) 76px;text-align:center}
@@ -296,9 +328,11 @@ footer svg{flex:0 0 auto}
   .polaroid figcaption{font-size:25px}
   h1{font-size:68px}
   .letter{padding-bottom:124px}
-  .paper{padding:74px 78px 66px}
+  .paper{padding:46px 62px 38px 78px}
+  .paper::before{left:58px}
+  .stamp{right:44px;width:82px;height:96px}
   .greet{font-size:34px}
-  .paper p{font-size:18px;line-height:2.1}
+  .paper p{font-size:16.5px;line-height:2.1}
   .sign b{font-size:30px}
   .beginning{padding-bottom:124px}
   .three{gap:64px;margin-top:38px}
@@ -366,18 +400,44 @@ footer svg{flex:0 0 auto}
 
   <!-- 02 信 -->
   <section class="letter">
-    <p class="chapter reveal">CHAPTER ONE · A LETTER</p>
+    <p class="chapter reveal">CHAPTER ONE &middot; A LETTER</p>
     <article class="paper reveal">
-      <p class="greet">婉婉，见字如面：</p>
-      <p>说起来，也是挺奇特的事情。刚开始的相识，我发现你好像比我更活泼一些，给我单一乏味的生活注入了新的色彩。</p>
-      <p>可是好景不长，你也说了你的顾虑，让我原本有些躁动的心又沉寂下去，也觉得自己无暇去用新的精力去认识新的人，甚至是重新循环着那些机械性的进场。</p>
-      <p>但第二次的接触，让我发现相处原来不用小心翼翼，你给的反馈也是积极正向的，让我开始憧憬未来的生活。我是个粗人，有时候想事情不够细致，所以谢谢你这段时间的包容和体谅。</p>
-      <p>今天是第一次见面，也是第一次陪你过生日。我在想用什么方式能给你留下不一样的印象，也在想这个方式不会让彼此那么尴尬。思来想去，最后还是把信、AI 和视频用这种方式呈现给你——也是我第一次尝试，做的不好的地方多多包涵哈。</p>
-      <p>愿你往后的每一天都开心。</p>
-      <div class="sign">
-        <b>乐乐</b>
-        <small>农历九月廿一 · 2026</small>
+      <div class="stamp" aria-hidden="true">
+        <span class="stamp-date">10.29</span>
+        <span class="stamp-note">农历九月廿一</span>
       </div>
+      <p class="greet">婉婉：</p>
+      <p class="greet-en">to the girl I keep thinking about</p>
+      <p>说起来，也是挺奇特的事情。这是情书吗？还是内心的独白呢？一直以来，咱们都是微信聊天，打打电话，其实交心的交流没那么多，也没有合适的机会。</p>
+      <p>今天是第一次见面，也是第一次陪你过生日。我在想用什么方式能给你留下不一样的印象，也在想这个方式不会让彼此那么尴尬。思来想去，最后还是把信、AI 和视频用这种方式呈现给你——也是我第一次尝试，做的不好的地方多多包涵哈。</p>
+      <p>刚开始的相识，对我来说挺意外，岁数的相差，让我本能的对认识比较抵触，而且又是异地，更加重了这个念头，不过出于对家里人的理解，还是迈出了这一步。</p>
+      <p>认识的第一天，我发现你好像比我更活泼一些，也确实，你正处于毕业后最为朝气的那段时光。我想，或许你的出现能让我的生活出现一些新的底色。</p>
+      <p>可是好景不长，你也说了你的顾虑，让我原本有些躁动的心又沉寂下去，也觉得自己无暇去用新的精力去认识新的人，不愿再重新循环着那些机械性的进场。</p>
+      <p>第二次的接触，来的突然，也是我没想到的。我本以为我们之间不会有交集了，但是你还一直挂念着之前的那个约定（真的是有心了）。没有轰轰烈烈的开场，没有跌宕起伏的剧情，我们俩就开始了电话粥，我发现我不用小心翼翼，也不用费尽心思去找话题，有时打电话，即便各自刷着自己的抖音，但电话那端也有个人记挂着。这种感觉挺奇妙的，我不知道你怎么想的，但是我确实觉得是可以试着开始了。</p>
+      <p>我不是一个多么浪漫的人，本身也是粗人一个，情商也不见得多高，话语也不见得说的有多漂亮，一直以来我都是秉着交往过程中真诚一些，看看能走到哪一步。虽然有些时候，一直都想着你能过来，毕竟只是设想，一旦躁动的心按耐不住，总会去幻想一些事情。有些时候你不接话，我能理解，也清楚你的担心。在此也很谢谢你给予的包容(*^_^*)</p>
+      <p>你当时问我们之间的关系是啥，我说缺一个正式表白的场合，你说见了面才能算男女朋友，我不知道现在你是怎么想的，可以不用着急回答，自己想清楚就好。</p>
+      <p class="closing">
+        <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true"><g stroke="#B5695E" stroke-width="1" stroke-linecap="round"><path d="M13 4.6v16.8M4.6 13h16.8M7.2 7.2l11.6 11.6M18.8 7.2L7.2 18.8"/><circle cx="13" cy="13" r="2.1"/></g></svg>
+        <span>愿你往后的每一天都开心。</span>
+      </p>
+      <div class="sign">
+        <svg class="sign-rose" width="34" height="42" viewBox="0 0 34 42" fill="none" aria-hidden="true">
+        <g stroke="#C9A98A" stroke-width="1.05" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 40c-.3-8 .2-14.5 1.4-20"/>
+          <path d="M18.3 29.5c-3.4-.7-5.8-2.8-7-6.2 3.4.2 5.8 1.9 7 4.4"/>
+          <path d="M18.6 26c3.3-1 5.6-3.1 6.7-6.4-3.3.4-5.5 2.1-6.7 4.4"/>
+          <path d="M18.6 20.6c-2.5-1.6-3.7-3.9-3.4-6.7 2.7.7 3.9 2.5 3.9 4.9"/>
+          <path d="M20.8 15.4c-2.6-1.7-3.8-4-3.4-6.7 2.6.8 3.7 2.6 3.7 5"/>
+          <path d="M14.6 8.2c2-1.6 4.6-1.7 6.6-.2 1.9 1.4 2.5 3.8 1.5 5.9-1 2-3 3.2-5.2 3.1-2.2 0-4.1-1.3-5-3.3-.8-1.8-.4-4 2.1-5.5Z"/>
+          <path d="M16.4 12.6c1-1.3 2.7-1.6 4-.6M16.6 15.2c1.2 1 2.8 1.1 4 .2"/>
+        </g>
+      </svg>
+        <div>
+          <b>乐乐</b>
+          <small>农历九月廿一 &middot; 2026</small>
+        </div>
+      </div>
+      <span class="paper-fold" aria-hidden="true"></span>
     </article>
   </section>
 
