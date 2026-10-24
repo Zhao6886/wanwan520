@@ -795,16 +795,30 @@ footer svg{flex:0 0 auto}
     vmodal.setAttribute('aria-hidden','true');
     document.body.style.overflow = '';
     try { blowVideo.pause(); } catch(_) {}
-    if (!bgm.paused) { fadeTo(TARGET); }
+    /* 音乐接回去：从暂停处继续，音量淡回来 */
+    if (videoWasPlaying) {
+      try { bgm.currentTime = videoMusicPos; } catch(_) {}
+      var rp = bgm.play();
+      if (rp && rp.then) {
+        rp.then(function(){ fadeTo(TARGET); })
+          .catch(function(){ musicNudge.classList.add('show'); });
+      } else {
+        fadeTo(TARGET);
+      }
+    }
     if (musicStarted) { showLyric(lyricAt(bgm.currentTime)); }
     revealSecret();
   }
+  var videoWasPlaying = false, videoMusicPos = 0;
   function openVideo(){
     vmodal.classList.add('open');
     vmodal.setAttribute('aria-hidden','false');
     hideLyric();
     document.body.style.overflow = 'hidden';
-    if (!bgm.paused) { fadeTo(0.05); }
+    /* 手机上播视频会把背景音乐自动暂停，所以这里自己先管住它：记住状态与进度 */
+    videoWasPlaying = !bgm.paused;
+    videoMusicPos = bgm.currentTime;
+    if (videoWasPlaying) { try { bgm.pause(); } catch(_) {} }
     var pr = blowVideo.play();
     if (pr && pr.catch) { pr.catch(function(){}); }
   }
