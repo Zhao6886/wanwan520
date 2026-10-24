@@ -310,7 +310,7 @@ footer svg{flex:0 0 auto}
   <section class="hero">
     <div class="hero-copy reveal">
       <p class="kicker">A LETTER FOR YOUR BIRTHDAY</p>
-      <h1>生日快乐，婉婷</h1>
+      <h1>生日快乐，婉婉</h1>
       <p class="hand">to the girl who makes<br>ordinary days taste like cake</p>
       <p class="sub">今天不用做任何人，只做被爱的那一个。</p>
       <hr class="hair">
@@ -320,7 +320,7 @@ footer svg{flex:0 0 auto}
       </p>
     </div>
     <figure class="polaroid reveal">
-      <img src="assets/photo.jpg" alt="婉婷" width="848" height="1040">
+      <img src="assets/photo.jpg" alt="婉婉" width="848" height="1040">
       <figcaption>my favorite person, in my favorite light</figcaption>
     </figure>
   </section>
@@ -329,7 +329,7 @@ footer svg{flex:0 0 auto}
   <section class="letter">
     <p class="chapter reveal">CHAPTER ONE · A LETTER</p>
     <article class="paper reveal">
-      <p class="greet">婉婷，见字如面：</p>
+      <p class="greet">婉婉，见字如面：</p>
       <p>说起来，也是挺奇特的事情。刚开始的相识，我发现你好像比我更活泼一些，给我单一乏味的生活注入了新的色彩。</p>
       <p>可是好景不长，你也说了你的顾虑，让我原本有些躁动的心又沉寂下去，也觉得自己无暇去用新的精力去认识新的人，甚至是重新循环着那些机械性的进场。</p>
       <p>但第二次的接触，让我发现相处原来不用小心翼翼，你给的反馈也是积极正向的，让我开始憧憬未来的生活。我是个粗人，有时候想事情不够细致，所以谢谢你这段时间的包容和体谅。</p>
@@ -444,7 +444,7 @@ footer svg{flex:0 0 auto}
       <p class="countdown" id="countdown"></p>
     </div>
     <article class="capsule-body" id="capsuleBody">
-      <p class="greet">婉婷，一年了。</p>
+      <p class="greet">婉婉，一年了。</p>
       <p>写这段话的时候，我们还不知道这一年会发生什么。可能吵过架，可能出过远门，也可能什么都没变，只是又一起吃了很多顿饭。</p>
       <p>这些都不重要。</p>
       <p>重要的是：一年后的今天，我还想坐在这儿，看你吹一次蜡烛。</p>
@@ -542,12 +542,19 @@ footer svg{flex:0 0 auto}
   bgm.volume = 0;
 
   var LYRICS = [
-    { t: 0.30, text: '漂亮的让我脸红的　可爱女人' },
-    { t: 0.44, text: '温柔的让我心疼的　可爱女人' },
-    { t: 0.58, text: '聪明的让我感动的　可爱女人' },
-    { t: 0.72, text: '坏坏的让我疯狂的　可爱女人' }
+    '漂亮的让我脸红的　可爱女人',
+    '温柔的让我心疼的　可爱女人',
+    '聪明的让我感动的　可爱女人',
+    '坏坏的让我疯狂的　可爱女人'
   ];
-  var lastLyric = -1;
+  var LYRIC_START = 0.05, LYRIC_STEP = 0.078;
+  var lastSlot = -2;
+
+  function lyricAt(pct) {
+    if (pct < LYRIC_START) { return '♪ 可爱女人'; }
+    var slot = Math.floor((pct - LYRIC_START) / LYRIC_STEP);
+    return LYRICS[slot % LYRICS.length];
+  }
 
   function fmtTime(t) {
     t = Math.floor(t || 0);
@@ -570,13 +577,11 @@ footer svg{flex:0 0 auto}
     pDur.textContent = dur ? fmtTime(dur) : '--:--';
     pProgress.style.width = dur ? (bgm.currentTime / dur * 100) + '%' : '0%';
     if (!dur) return;
-    var pct = bgm.currentTime / dur, idx = -1;
-    for (var i = 0; i < LYRICS.length; i++) {
-      if (pct >= LYRICS[i].t && pct < LYRICS[i].t + 0.135) { idx = i; break; }
-    }
-    if (idx !== -1 && idx !== lastLyric) {
-      lastLyric = idx;
-      pLyric.textContent = LYRICS[idx].text;
+    var pct = bgm.currentTime / dur;
+    var slot = pct < LYRIC_START ? -1 : Math.floor((pct - LYRIC_START) / LYRIC_STEP);
+    if (slot !== lastSlot) {
+      lastSlot = slot;
+      pLyric.textContent = lyricAt(pct);
     }
   }
   bgm.addEventListener('timeupdate', updatePlayer);
@@ -594,6 +599,7 @@ footer svg{flex:0 0 auto}
       }).catch(function(){});
     } else {
       fadeTo(0, function(){ bgm.pause(); });
+      lastSlot = -2;
       playerEl.classList.remove('open');
       musicBtn.classList.remove('on');
       musicBtn.setAttribute('aria-pressed', 'false');
