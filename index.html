@@ -199,6 +199,26 @@ h2{
 .secret-in p{margin:0 0 10px;font-size:15px;line-height:1.95;color:var(--ink2)}
 .secret-in small{display:block;margin-top:12px;font-size:11px;letter-spacing:.14em;color:var(--faint)}
 
+/* ---------- 时间胶囊 ---------- */
+.capsule{display:flex;flex-direction:column;align-items:center;gap:12px;padding:0 var(--pad) 78px;text-align:center}
+.sealed{margin-top:26px;width:100%;max-width:520px;border:1px dashed #D9C7B4;border-radius:8px;padding:34px 24px 30px;background:rgba(255,255,255,.55);display:flex;flex-direction:column;align-items:center;gap:14px}
+.wax{width:56px;height:56px;border-radius:50%;background:var(--rose);color:#FFF6EC;font-family:var(--handcn);font-size:25px;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(181,105,94,.26)}
+.sealed p{margin:0;font-size:15px;line-height:1.95;color:var(--ink2)}
+.countdown{margin:2px 0 0;font-family:var(--handen);font-size:23px;color:var(--rose)}
+.capsule-body{display:none;width:100%;max-width:760px;margin-top:26px;background:var(--card);border-radius:6px;padding:32px 24px;box-shadow:0 10px 30px rgba(45,42,38,.075);text-align:left}
+.capsule-body.show{display:block}
+.capsule-body p{margin:0 0 14px;font-size:16px;line-height:2.05;color:var(--ink2)}
+.capsule-body .greet{margin:0 0 16px}
+
+/* ---------- 纪念卡 ---------- */
+.postcard{display:flex;flex-direction:column;align-items:center;gap:12px;padding:0 var(--pad) 86px;text-align:center}
+.card-img{margin-top:24px;width:100%;max-width:360px;border-radius:4px;box-shadow:0 18px 44px rgba(45,42,38,.16)}
+.dl{margin-top:8px;font-size:12px;letter-spacing:.14em;color:var(--muted2);text-decoration:none;border-bottom:1px solid #D9C7B4;padding-bottom:3px}
+
+/* ---------- 歌词 ---------- */
+.lyric{position:fixed;left:20px;bottom:84px;max-width:62vw;font-family:var(--serif);font-size:12.5px;line-height:1.7;color:#8A7F72;letter-spacing:.06em;opacity:0;transform:translateY(6px);transition:opacity .9s ease,transform .9s ease;pointer-events:none;z-index:35;text-shadow:0 1px 8px rgba(250,246,240,.95),0 0 14px rgba(250,246,240,.9)}
+.lyric.on{opacity:.95;transform:none}
+
 /* ---------- 页脚 ---------- */
 footer{
   border-top:1px solid var(--line);padding:26px var(--pad) calc(38px + env(safe-area-inset-bottom));
@@ -260,6 +280,10 @@ footer svg{flex:0 0 auto}
   .card figcaption{font-size:23px}
   .quote{padding:96px 120px}
   .wish{padding:112px 120px 90px}
+  .capsule{padding-bottom:124px}
+  .postcard{padding-bottom:124px}
+  .card-img{max-width:380px}
+  .lyric{left:120px;bottom:96px;font-size:14px}
   footer{padding:32px 120px 42px;font-size:12px}
   .music{right:28px;bottom:28px;width:50px;height:50px}
 }
@@ -408,6 +432,35 @@ footer svg{flex:0 0 auto}
     </div>
   </section>
 
+  <!-- 08 时间胶囊 -->
+  <section class="capsule">
+    <p class="chapter reveal">CHAPTER SIX &middot; ONE YEAR LATER</p>
+    <h2 class="reveal">一封还没到时间的信</h2>
+    <p class="sec-sub reveal">写给 2027 年的今天。</p>
+    <div class="sealed reveal" id="sealed">
+      <div class="wax">封</div>
+      <p>这封信封在这里。<br>还没到拆的时候。</p>
+      <p class="countdown" id="countdown"></p>
+    </div>
+    <article class="capsule-body" id="capsuleBody">
+      <p class="greet">婉婷，一年了。</p>
+      <p>写这段话的时候，我们还不知道这一年会发生什么。可能吵过架，可能出过远门，也可能什么都没变，只是又一起吃了很多顿饭。</p>
+      <p>这些都不重要。</p>
+      <p>重要的是：一年后的今天，我还想坐在这儿，看你吹一次蜡烛。</p>
+      <p>你现在读到这儿，说明我又陪你过了一个生日。</p>
+      <p>生日快乐。</p>
+    </article>
+  </section>
+
+  <!-- 09 纪念卡 -->
+  <section class="postcard">
+    <p class="chapter reveal">KEEP IT</p>
+    <h2 class="reveal">带走一张</h2>
+    <p class="sec-sub reveal">长按图片存进相册。</p>
+    <img class="card-img reveal" src="assets/card.jpg" alt="纪念卡" width="1080" height="1620" loading="lazy">
+    <a class="dl reveal" href="assets/card.jpg" download="给她的一天.jpg">也可以点这里下载</a>
+  </section>
+
 </main>
 
 <footer>
@@ -424,6 +477,7 @@ footer svg{flex:0 0 auto}
   </svg>
 </button>
 
+<div class="lyric" id="lyric" aria-hidden="true"><span id="lyricText"></span></div>
 <canvas id="confetti"></canvas>
 <audio id="bgm" src="assets/bgm.mp3" loop preload="none"></audio>
 
@@ -514,6 +568,46 @@ footer svg{flex:0 0 auto}
       secret.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
     }, 260);
   });
+
+  /* 时间胶囊 */
+  var capsuleTarget = new Date('2027-10-20T00:00:00+08:00').getTime();
+  var sealedEl = document.getElementById('sealed');
+  var capsuleBody = document.getElementById('capsuleBody');
+  var cdEl = document.getElementById('countdown');
+  if (Date.now() >= capsuleTarget) {
+    if (sealedEl) { sealedEl.style.display = 'none'; }
+    if (capsuleBody) { capsuleBody.classList.add('show'); }
+  } else if (cdEl) {
+    var leftDays = Math.ceil((capsuleTarget - Date.now()) / 86400000);
+    cdEl.textContent = '距离拆封还有 ' + leftDays + ' 天';
+  }
+
+  /* 歌词（随歌曲推进，非逐字对齐） */
+  var LYRICS = [
+    { t: 0.30, text: '漂亮的让我脸红的　可爱女人' },
+    { t: 0.44, text: '温柔的让我心疼的　可爱女人' },
+    { t: 0.58, text: '聪明的让我感动的　可爱女人' },
+    { t: 0.72, text: '坏坏的让我疯狂的　可爱女人' }
+  ];
+  var lyricEl = document.getElementById('lyric');
+  var lyricText = document.getElementById('lyricText');
+  var lastLyric = -1;
+  function updateLyric() {
+    if (!bgm.duration || bgm.paused) { lyricEl.classList.remove('on'); return; }
+    var pct = bgm.currentTime / bgm.duration, idx = -1;
+    for (var i = 0; i < LYRICS.length; i++) {
+      if (pct >= LYRICS[i].t && pct < LYRICS[i].t + 0.135) { idx = i; break; }
+    }
+    if (idx === -1) { lyricEl.classList.remove('on'); lastLyric = -1; return; }
+    if (idx !== lastLyric) {
+      lastLyric = idx;
+      lyricText.textContent = LYRICS[idx].text;
+      lyricEl.classList.add('on');
+    }
+  }
+  bgm.addEventListener('timeupdate', updateLyric);
+  bgm.addEventListener('pause', function(){ lyricEl.classList.remove('on'); lastLyric = -1; });
+  bgm.addEventListener('ended', function(){ lyricEl.classList.remove('on'); lastLyric = -1; });
 
   /* 彩纸 */
   var cv = document.getElementById('confetti');

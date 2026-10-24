@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<style>
+@font-face{font-family:'S';src:url('fonts/serif-r.woff2') format('woff2');font-weight:400}
+@font-face{font-family:'S';src:url('fonts/serif-sb.woff2') format('woff2');font-weight:600}
+@font-face{font-family:'H';src:url('fonts/mashan.woff2') format('woff2')}
+@font-face{font-family:'E';src:url('fonts/caveat.woff2') format('woff2')}
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:1080px;height:1620px;background:#FAF6F0;font-family:'S',serif;color:#2D2A26;overflow:hidden}
+.wrap{width:1080px;height:1620px;padding:56px 56px 48px;display:flex;flex-direction:column}
+.photo{width:100%;height:900px;object-fit:cover;object-position:50% 34%;border-radius:2px}
+.head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:26px}
+.brand{font-size:22px;letter-spacing:.4em;color:#2D2A26}
+.date{font-size:17px;letter-spacing:.22em;color:#A07856}
+.mid{padding:38px 22px 0;display:flex;flex-direction:column;gap:16px}
+h1{font-size:76px;font-weight:600;line-height:1.22;letter-spacing:-.01em}
+.hand{font-family:'E';font-size:44px;color:#B5695E;line-height:1.1}
+.line{width:64px;height:1px;background:#D9C7B4;margin:8px 0}
+.bless{font-family:'H';font-size:40px;line-height:1.6;color:#B5695E;white-space:nowrap}
+.foot{margin-top:auto;display:flex;justify-content:space-between;align-items:flex-end;padding:26px 22px 0;border-top:1px solid #E8DDC8}
+.foot .sign{font-family:'H';font-size:40px;color:#8C7B66}
+.foot .yr{font-size:16px;letter-spacing:.24em;color:#A89B8C}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <span class="brand">为她的一天</span>
+    <span class="date">农历九月廿一 · 2026</span>
+  </div>
+  <img class="photo" src="assets/photo.jpg" alt="">
+  <div class="mid">
+    <h1>生日快乐，婉婷</h1>
+    <p class="hand">my favorite person</p>
+    <div class="line"></div>
+    <p class="bless">一年四季，一日三餐，平平淡淡，喜乐安康。</p>
+  </div>
+  <div class="foot">
+    <span class="sign">乐乐</span>
+    <span class="yr">10.29 · 2026</span>
+  </div>
+</div>
+</body>
+</html>
