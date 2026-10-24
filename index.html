@@ -108,38 +108,6 @@ h2{
 .three span{font-size:14px;font-weight:500;color:var(--ink2);letter-spacing:.02em}
 .closing{margin:28px 0 0;font-family:var(--handcn);font-size:22px;line-height:1.7;color:var(--muted2)}
 
-/* ---------- 视频 ---------- */
-.film{display:flex;flex-direction:column;align-items:center;padding:0 var(--pad) 76px}
-.video-wrap{
-  position:relative;width:100%;max-width:1080px;margin:26px auto 0;aspect-ratio:16/9;
-  border-radius:6px;overflow:hidden;background:#2A2521;
-  box-shadow:0 18px 44px rgba(45,42,38,.18);
-}
-.video-wrap video{width:100%;height:100%;object-fit:cover;display:block;background:#2A2521}
-.cover{
-  position:absolute;inset:0;border:0;padding:0;cursor:pointer;
-  background-image:url('assets/poster.jpg');background-size:cover;background-position:center;
-  display:flex;align-items:center;justify-content:center;
-  transition:opacity .4s ease;
-}
-.cover.hide{opacity:0;pointer-events:none}
-.cover .play{
-  width:62px;height:62px;border-radius:50%;background:rgba(45,42,38,.8);
-  display:flex;align-items:center;justify-content:center;
-  transition:transform .3s ease,background .3s ease;
-  box-shadow:0 8px 20px rgba(0,0,0,.22);
-}
-.cover:hover .play{transform:scale(1.06);background:rgba(45,42,38,.92)}
-.film-meta{
-  display:flex;justify-content:space-between;align-items:center;gap:14px;
-  width:100%;max-width:1080px;margin:14px auto 0;flex-wrap:wrap;
-}
-.chip{
-  border:1px solid #DED2BF;border-radius:999px;padding:5px 13px;
-  font-size:10.5px;letter-spacing:.1em;color:var(--muted2);white-space:nowrap;
-}
-.hand-cap{font-family:var(--handen);font-size:20px;color:var(--rose)}
-
 /* ---------- 瞬间 · 拖拽对比 ---------- */
 .moments{display:flex;flex-direction:column;gap:22px;padding:0 0 76px}
 .more{margin:24px 0 0;padding:0 var(--pad);font-size:14.5px;line-height:1.9;color:var(--muted2);text-align:center;letter-spacing:.04em}
@@ -209,6 +177,20 @@ h2{
 .candle.blown svg{transform:scale(.4);opacity:0}
 .candle-cap{margin:2px 0 0;font-size:12px;letter-spacing:.08em;color:var(--muted2)}
 
+/* ---------- 吹蜡烛后的视频 ---------- */
+.vmodal{position:fixed;inset:0;z-index:80;display:none;align-items:center;justify-content:center;padding:24px}
+.vmodal.open{display:flex}
+.vmodal-back{position:absolute;inset:0;background:rgba(28,24,20,.8);animation:fadeIn .35s ease both}
+.vmodal-box{position:relative;width:100%;max-width:min(90vw,400px);animation:pop .5s cubic-bezier(.22,.61,.36,1) both}
+.vmodal-box video{width:100%;aspect-ratio:9/16;max-height:72vh;object-fit:contain;
+  border-radius:8px;background:#141210;display:block;
+  box-shadow:0 30px 70px rgba(0,0,0,.55)}
+.vmodal-close{position:absolute;top:-13px;right:-6px;width:36px;height:36px;border-radius:50%;
+  border:0;background:#FAF6F0;color:#2D2A26;font-size:19px;line-height:1;cursor:pointer;
+  box-shadow:0 6px 18px rgba(0,0,0,.32);padding:0}
+.vmodal-cap{margin:14px 0 0;text-align:center;font-size:12px;letter-spacing:.16em;color:#E9DFD0}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes pop{from{opacity:0;transform:translateY(16px) scale(.97)}to{opacity:1;transform:none}}
 /* ---------- 彩蛋 ---------- */
 .secret{display:none;width:100%;max-width:560px}
 .secret.show{display:block;animation:rise .85s cubic-bezier(.22,.61,.36,1) both}
@@ -388,30 +370,10 @@ footer svg{flex:0 0 auto}
     <p class="closing reveal">后面的日子，还没写。</p>
   </section>
 
-  <!-- 04 视频 -->
-  <section class="film">
-    <div class="head reveal">
-      <p class="chapter">CHAPTER THREE · 16 SECONDS</p>
-      <h2>十六秒的你</h2>
-    </div>
-    <div class="video-wrap reveal">
-      <video id="film" playsinline preload="metadata" poster="assets/poster.jpg" src="assets/video.mp4"></video>
-      <button class="cover" id="cover" aria-label="播放视频">
-        <span class="play">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 5.5L18.5 12L8 18.5V5.5Z" fill="#FAF6F0"/></svg>
-        </span>
-      </button>
-    </div>
-    <div class="film-meta reveal">
-      <span class="chip">00:16 · 她的视频 · 16:9</span>
-      <span class="hand-cap">sixteen seconds, watched a hundred times</span>
-    </div>
-  </section>
-
-  <!-- 05 瞬间 -->
+  <!-- 04 瞬间 -->
   <section class="moments">
     <div class="head reveal" style="gap:12px">
-      <p class="chapter">CHAPTER FOUR · MOMENTS</p>
+      <p class="chapter">CHAPTER THREE · MOMENTS</p>
       <h2>这些瞬间，本来只有一个人</h2>
     </div>
 
@@ -471,16 +433,16 @@ footer svg{flex:0 0 auto}
     <p class="more reveal">未来还有很多个时刻，期待和你一起探索</p>
   </section>
 
-  <!-- 06 引言 -->
+  <!-- 05 引言 -->
   <section class="quote">
     <div class="line reveal"></div>
     <blockquote class="reveal">愿能陪你共赴每一场热爱，<br>共度每一轮四季，<br>如山间清爽的风，如古城温暖的光。</blockquote>
     <div class="line-b reveal"></div>
   </section>
 
-  <!-- 07 祝福 -->
+  <!-- 06 祝福 -->
   <section class="wish">
-    <p class="chapter reveal">CHAPTER FIVE · THE WISH</p>
+    <p class="chapter reveal">CHAPTER FOUR · THE WISH</p>
     <h2 class="hbd reveal">生日快乐</h2>
     <p class="hand2 reveal">happy birthday, my love</p>
     <button class="candle reveal" id="candle">
@@ -499,9 +461,9 @@ footer svg{flex:0 0 auto}
     </div>
   </section>
 
-  <!-- 08 时间胶囊 -->
+  <!-- 07 时间胶囊 -->
   <section class="capsule">
-    <p class="chapter reveal">CHAPTER SIX &middot; ONE YEAR LATER</p>
+    <p class="chapter reveal">CHAPTER FIVE &middot; ONE YEAR LATER</p>
     <h2 class="reveal">一封还没到时间的信</h2>
     <p class="sec-sub reveal">写给 2027 年的今天。</p>
     <div class="sealed reveal" id="sealed">
@@ -519,7 +481,7 @@ footer svg{flex:0 0 auto}
     </article>
   </section>
 
-  <!-- 09 纪念卡 -->
+  <!-- 08 纪念卡 -->
   <section class="postcard">
     <p class="chapter reveal">KEEP IT</p>
     <h2 class="reveal">带走一张</h2>
@@ -560,6 +522,15 @@ footer svg{flex:0 0 auto}
   </button>
 </div>
 
+
+  <div class="vmodal" id="vmodal" aria-hidden="true">
+    <div class="vmodal-back" id="vback"></div>
+    <div class="vmodal-box">
+      <video id="blowVideo" playsinline controls preload="metadata" poster="assets/blow-poster.jpg" src="assets/blow.mp4"></video>
+      <button class="vmodal-close" id="vclose" aria-label="关闭视频">×</button>
+      <p class="vmodal-cap">看完这段，再往下</p>
+    </div>
+  </div>
 <canvas id="confetti"></canvas>
 <audio id="bgm" src="assets/bgm.mp3" loop preload="none"></audio>
 
@@ -587,24 +558,6 @@ footer svg{flex:0 0 auto}
   }
 
   /* 拖拽对比 */
-
-  /* 视频 */
-  var film = document.getElementById('film');
-  var cover = document.getElementById('cover');
-  cover.addEventListener('click', function(){
-    cover.classList.add('hide');
-    film.controls = true;
-    var p = film.play();
-    if (p && p.catch) { p.catch(function(){}); }
-    if (!bgm.paused) { fadeTo(0.07); }
-  });
-  film.addEventListener('pause', function(){
-    if (film.currentTime < 0.2) { cover.classList.remove('hide'); film.controls = false; }
-    if (!bgm.paused) { fadeTo(TARGET); }
-  });
-  film.addEventListener('ended', function(){
-    if (!bgm.paused) { fadeTo(TARGET); }
-  });
 
   /* 背景音乐 + 播放器 */
   /* ---------- 翻面：一个人 → 两个人 ---------- */
@@ -756,18 +709,49 @@ footer svg{flex:0 0 auto}
   var cap = document.getElementById('candleCap');
   var secret = document.getElementById('secret');
   var blown = false;
+  var vmodal = document.getElementById('vmodal');
+  var blowVideo = document.getElementById('blowVideo');
+  var vclose = document.getElementById('vclose');
+  var vback = document.getElementById('vback');
+
+  function revealSecret(){
+    if (secret.classList.contains('show')) return;
+    secret.classList.add('show');
+    setTimeout(function(){
+      secret.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
+    }, 260);
+  }
+  function closeVideo(){
+    vmodal.classList.remove('open');
+    vmodal.setAttribute('aria-hidden','true');
+    document.body.style.overflow = '';
+    try { blowVideo.pause(); } catch(_) {}
+    if (!bgm.paused) { fadeTo(TARGET); }
+    revealSecret();
+  }
+  function openVideo(){
+    vmodal.classList.add('open');
+    vmodal.setAttribute('aria-hidden','false');
+    document.body.style.overflow = 'hidden';
+    if (!bgm.paused) { fadeTo(0.05); }
+    var pr = blowVideo.play();
+    if (pr && pr.catch) { pr.catch(function(){}); }
+  }
+  if (blowVideo) {
+    blowVideo.addEventListener('ended', closeVideo);
+  }
+  if (vclose) { vclose.addEventListener('click', closeVideo); }
+  if (vback) { vback.addEventListener('click', closeVideo); }
+
   candle.addEventListener('click', function(){
     if (blown) return;
     blown = true;
     candle.classList.add('blown');
     candle.querySelector('svg').style.display = 'none';
     candle.lastChild.textContent = ' 蜡烛灭了';
-    cap.textContent = '愿望收到。往下看一眼。';
+    cap.textContent = '有人在等你。';
     if (!reduce) burst();
-    secret.classList.add('show');
-    setTimeout(function(){
-      secret.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
-    }, 260);
+    openVideo();
   });
 
   /* 时间胶囊 */
