@@ -212,7 +212,13 @@ h2{
 
 /* ---------- 纪念卡 ---------- */
 .postcard{display:flex;flex-direction:column;align-items:center;gap:12px;padding:0 var(--pad) 86px;text-align:center}
-.card-img{margin-top:24px;width:100%;max-width:360px;border-radius:4px;box-shadow:0 18px 44px rgba(45,42,38,.16)}
+.postcard-card{margin:24px 0 0;width:100%;max-width:360px;background:#fff;padding:12px 12px 18px;border-radius:4px;box-shadow:0 18px 44px rgba(45,42,38,.16)}
+.postcard-card img{display:block;width:100%;height:auto;border-radius:2px}
+.pcc{display:flex;flex-direction:column;align-items:center;gap:5px;padding:16px 4px 0}
+.pcc-title{font-size:19px;font-weight:600;color:var(--ink);letter-spacing:.02em}
+.pcc-hand{font-family:var(--handen);font-size:19px;line-height:1.2;color:var(--rose)}
+.pcc-bless{margin-top:3px;font-family:var(--handcn);font-size:clamp(15px,4.2vw,17px);line-height:1.75;color:#8C7B66;text-align:center}
+.pcc-sign{margin-top:6px;font-size:10px;letter-spacing:.2em;color:var(--faint)}
 .dl{margin-top:8px;font-size:12px;letter-spacing:.14em;color:var(--muted2);text-decoration:none;border-bottom:1px solid #D9C7B4;padding-bottom:3px}
 
 /* ---------- 歌词 ---------- */
@@ -283,7 +289,7 @@ footer svg{flex:0 0 auto}
   .wish{padding:112px 120px 90px}
   .capsule{padding-bottom:124px}
   .postcard{padding-bottom:124px}
-  .card-img{max-width:380px}
+  .postcard-card{max-width:380px}
   footer{padding:32px 120px 42px;font-size:12px}
   .player{right:28px;bottom:28px}
   .player-btn{width:50px;height:50px}
@@ -458,7 +464,15 @@ footer svg{flex:0 0 auto}
     <p class="chapter reveal">KEEP IT</p>
     <h2 class="reveal">带走一张</h2>
     <p class="sec-sub reveal">长按图片存进相册。</p>
-    <img class="card-img reveal" src="assets/card.jpg" alt="纪念卡" width="1080" height="1620" loading="lazy">
+    <figure class="postcard-card reveal">
+      <img src="assets/card.jpg" alt="贺卡" width="1080" height="1440" loading="lazy">
+      <figcaption class="pcc">
+        <span class="pcc-title">生日快乐，婉婉</span>
+        <span class="pcc-hand">my favorite person</span>
+        <span class="pcc-bless">一年四季，一日三餐，<br>平平淡淡，喜乐安康。</span>
+        <span class="pcc-sign">乐乐 · 10.29</span>
+      </figcaption>
+    </figure>
     <a class="dl reveal" href="assets/card.jpg" download="给她的一天.jpg">也可以点这里下载</a>
   </section>
 
@@ -584,19 +598,31 @@ footer svg{flex:0 0 auto}
       pLyric.textContent = lyricAt(pct);
     }
   }
+  bgm.addEventListener('playing', function(){
+    if (!bgm.paused && bgm.volume < TARGET * 0.9) { fadeTo(TARGET); }
+  });
   bgm.addEventListener('timeupdate', updatePlayer);
   bgm.addEventListener('loadedmetadata', updatePlayer);
 
   musicBtn.addEventListener('click', function(){
     if (bgm.paused) {
-      bgm.play().then(function(){
-        fadeTo(TARGET);
-        playerEl.classList.add('open');
-        musicBtn.classList.add('on');
-        musicBtn.classList.remove('hint');
-        musicBtn.setAttribute('aria-pressed', 'true');
-        updatePlayer();
-      }).catch(function(){});
+      bgm.volume = 0;
+      var p = bgm.play();
+      if (p && p.catch) {
+        p.catch(function(){
+          playerEl.classList.remove('open');
+          musicBtn.classList.remove('on');
+          musicBtn.setAttribute('aria-pressed', 'false');
+          bgm.volume = 0;
+        });
+      }
+      /* 立刻给反馈，不等音频缓冲完 */
+      fadeTo(TARGET);
+      playerEl.classList.add('open');
+      musicBtn.classList.add('on');
+      musicBtn.classList.remove('hint');
+      musicBtn.setAttribute('aria-pressed', 'true');
+      updatePlayer();
     } else {
       fadeTo(0, function(){ bgm.pause(); });
       lastSlot = -2;
