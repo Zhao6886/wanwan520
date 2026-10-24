@@ -406,7 +406,7 @@ footer svg{flex:0 0 auto}
         <figcaption>two cups, one morning</figcaption>
       </figure>
     </div>
-    <p class="more reveal">还有很多个时刻，待添加。</p>
+    <p class="more reveal">未来还有很多个时刻，期待和你一起探索</p>
     <p class="more-hand reveal">一年四季，一日三餐，<br>平平淡淡，喜乐安康。</p>
   </section>
 
@@ -414,7 +414,6 @@ footer svg{flex:0 0 auto}
   <section class="quote">
     <div class="line reveal"></div>
     <blockquote class="reveal">愿今天能陪你共赴每一场热爱，<br>共度每一轮四季，<br>如山间清爽的风，如古城温暖的光。</blockquote>
-    <p class="by reveal">—— 除了这些，我说不出更好的</p>
     <div class="line-b reveal"></div>
   </section>
 
@@ -556,18 +555,63 @@ footer svg{flex:0 0 auto}
   bgm.volume = 0;
 
   var LYRICS = [
-    '漂亮的让我脸红的　可爱女人',
-    '温柔的让我心疼的　可爱女人',
-    '聪明的让我感动的　可爱女人',
-    '坏坏的让我疯狂的　可爱女人'
+    [29.81, '想要有直升机'],
+    [32.77, '想要和你飞到宇宙去'],
+    [36.26, '想要和你融化在一起'],
+    [39.81, '融化在银河里'],
+    [41.99, '我每天每天每天在想想想想着你'],
+    [46.51, '这样的甜蜜让我开始相信命运'],
+    [51.15, '感谢地心引力让我碰到你'],
+    [57.45, '漂亮的让我面红的可爱女人'],
+    [61.04, '温柔的让我心疼的可爱女人'],
+    [64.55, '透明的让我感动的可爱女人'],
+    [68.05, '坏坏的让我疯狂的可爱女人'],
+    [71.81, '漂亮的让我面红的可爱女人'],
+    [75.17, '温柔的让我心疼的可爱女人'],
+    [78.71, '透明的让我感动的可爱女人'],
+    [82.31, '坏坏的让我疯狂的可爱女人'],
+    [114.87, '想要有直升机'],
+    [117.74, '想要和你飞到宇宙去'],
+    [121.23, '想要和你融化在一起'],
+    [124.80, '融化在银河里'],
+    [126.93, '我每天每天每天在想想想想着你'],
+    [131.51, '这样的甜蜜让我开始相信命运'],
+    [136.17, '感谢地心引力让我碰到你'],
+    [142.51, '漂亮的让我面红的可爱女人'],
+    [146.00, '温柔的让我心疼的可爱女人'],
+    [149.53, '透明的让我感动的可爱女人'],
+    [153.07, '坏坏的让我疯狂的可爱女人'],
+    [156.67, '漂亮的让我面红的可爱女人'],
+    [160.17, '温柔的让我心疼的可爱女人'],
+    [163.74, '透明的让我感动的可爱女人'],
+    [167.26, '坏坏的让我疯狂的可爱女人'],
+    [171.00, '世界这样大而我而我'],
+    [174.04, '只是只小小小的蚂蚁'],
+    [178.44, '但我要尽全力全力全力保护你'],
+    [185.09, '漂亮的让我面红的可爱女人'],
+    [188.48, '温柔的让我心疼的可爱女人'],
+    [192.03, '透明的让我感动的可爱女人'],
+    [195.55, '坏坏的让我疯狂的可爱女人'],
+    [199.14, '漂亮的让我面红的可爱女人'],
+    [202.67, '温柔的让我心疼的可爱女人'],
+    [206.25, '透明的让我感动的可爱女人'],
+    [209.78, '坏坏的让我疯狂的可爱女人'],
+    [213.39, '漂亮的让我面红的可爱女人'],
+    [216.86, '温柔的让我心疼的可爱女人'],
+    [220.52, '透明的让我感动的可爱女人'],
+    [223.98, '坏坏的让我疯狂的可爱女人'],
+    [227.59, '漂亮的让我面红的可爱女人'],
+    [231.05, '温柔的让我心疼的可爱女人'],
+    [234.62, '透明的让我感动的']
   ];
-  var LYRIC_START = 0.05, LYRIC_STEP = 0.078;
   var lastSlot = -2;
 
-  function lyricAt(pct) {
-    if (pct < LYRIC_START) { return '♪ 可爱女人'; }
-    var slot = Math.floor((pct - LYRIC_START) / LYRIC_STEP);
-    return LYRICS[slot % LYRICS.length];
+  function lyricAt(t) {
+    var text = '♪ 可爱女人';
+    for (var i = 0; i < LYRICS.length; i++) {
+      if (t >= LYRICS[i][0]) { text = LYRICS[i][1]; } else { break; }
+    }
+    return text;
   }
 
   function fmtTime(t) {
@@ -591,11 +635,13 @@ footer svg{flex:0 0 auto}
     pDur.textContent = dur ? fmtTime(dur) : '--:--';
     pProgress.style.width = dur ? (bgm.currentTime / dur * 100) + '%' : '0%';
     if (!dur) return;
-    var pct = bgm.currentTime / dur;
-    var slot = pct < LYRIC_START ? -1 : Math.floor((pct - LYRIC_START) / LYRIC_STEP);
-    if (slot !== lastSlot) {
-      lastSlot = slot;
-      pLyric.textContent = lyricAt(pct);
+    var t = bgm.currentTime, idx = -1;
+    for (var i = 0; i < LYRICS.length; i++) {
+      if (t >= LYRICS[i][0]) { idx = i; } else { break; }
+    }
+    if (idx !== lastSlot) {
+      lastSlot = idx;
+      pLyric.textContent = lyricAt(t);
     }
   }
   bgm.addEventListener('playing', function(){
