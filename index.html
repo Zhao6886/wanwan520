@@ -144,18 +144,39 @@ h2{
 .moments{display:flex;flex-direction:column;gap:22px;padding:0 0 76px}
 .more{margin:24px 0 0;padding:0 var(--pad);font-size:14.5px;line-height:1.9;color:var(--muted2);text-align:center;letter-spacing:.04em}
 .moments .head{padding:0 var(--pad)}
-.duo{display:grid;grid-template-columns:1fr;gap:40px;padding:18px var(--pad) 2px;max-width:900px;margin:0 auto}
-.pair{margin:0;display:flex;flex-direction:column;gap:12px}
-.panels{display:grid;grid-template-columns:1fr 1fr;gap:11px}
-.panel{position:relative;overflow:hidden;border-radius:5px;background:#F2EBDC;aspect-ratio:4/5;
-  box-shadow:0 8px 22px rgba(45,42,38,.08)}
-.panel img{width:100%;height:100%;object-fit:cover;display:block}
-.panel .tag{position:absolute;top:10px;font-size:10px;letter-spacing:.14em;padding:4px 10px;
-  border-radius:99px;white-space:nowrap;background:rgba(255,255,255,.92);color:#6E6862;
-  box-shadow:0 2px 8px rgba(45,42,38,.1)}
-.panel .tag-a{left:10px}
-.panel .tag-b{right:10px;background:var(--rose);color:#FFF6EC}
-.pair figcaption{font-size:14px;letter-spacing:.06em;color:#A07856;text-align:center;line-height:1.7;margin:0}
+.duo{display:grid;grid-template-columns:1fr;gap:34px;padding:16px var(--pad) 2px;width:100%;max-width:420px;margin:0 auto}
+.pair{margin:0;display:flex;flex-direction:column;gap:13px}
+.flip{position:relative;display:block;width:100%;aspect-ratio:4/5;border:0;padding:0;margin:0;
+  background:transparent;cursor:pointer;perspective:1200px;-webkit-tap-highlight-color:transparent;
+  font:inherit;color:inherit}
+.flip-inner{position:absolute;inset:0;transform-style:preserve-3d;
+  transition:transform .78s cubic-bezier(.42,.02,.3,1)}
+.pair.on .flip-inner{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;overflow:hidden;border-radius:5px;background:#F2EBDC;
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  box-shadow:0 10px 26px rgba(45,42,38,.10)}
+.face.back{transform:rotateY(180deg)}
+.face img{width:100%;height:100%;object-fit:cover;display:block}
+.face .tag{position:absolute;top:10px;left:10px;font-size:10px;letter-spacing:.14em;
+  padding:4px 10px;border-radius:99px;white-space:nowrap;
+  background:rgba(255,255,255,.92);color:#6E6862;box-shadow:0 2px 8px rgba(45,42,38,.1)}
+.face .tag-b{background:var(--rose);color:#FFF6EC}
+.hint-flip{position:absolute;right:11px;bottom:11px;z-index:3;pointer-events:none;
+  font-size:10.5px;letter-spacing:.16em;color:#7A6A56;background:rgba(255,255,255,.9);
+  padding:4px 11px;border-radius:99px;box-shadow:0 3px 10px rgba(45,42,38,.1);
+  transition:opacity .5s ease;animation:flipPulse 2.8s ease-in-out infinite}
+.pair.touched .hint-flip{opacity:0;animation:none}
+@keyframes flipPulse{0%,100%{opacity:.45}50%{opacity:1}}
+.pair figcaption{position:relative;height:1.8em;font-size:14px;letter-spacing:.06em;
+  color:#A07856;text-align:center;line-height:1.8}
+.cap-a,.cap-b{position:absolute;left:0;right:0;top:0;transition:opacity .5s ease .18s}
+.cap-b{opacity:0}
+.pair.on .cap-a{opacity:0}
+.pair.on .cap-b{opacity:1}
+@media (prefers-reduced-motion: reduce){
+  .flip-inner{transition:transform .01s linear}
+  .hint-flip{animation:none;opacity:.85}
+}
 .pair figcaption i{font-style:normal;margin:0 6px;color:#C9A98B}
 
 /* ---------- 引言 ---------- */
@@ -278,8 +299,7 @@ footer svg{flex:0 0 auto}
   .closing{font-size:26px;margin-top:40px}
   .film{padding-bottom:124px}
   .moments{padding-bottom:124px}
-  .duo{grid-template-columns:1fr;gap:74px;padding:30px 120px 2px;max-width:980px;margin:0 auto}
-  .panels{gap:16px}
+  .duo{grid-template-columns:repeat(3,1fr);gap:26px;padding:28px 120px 2px;max-width:none}
   .pair figcaption{font-size:14px}
   .more{margin-top:34px;font-size:16px}
   .strip{overflow:visible;justify-content:center;gap:34px;padding:10px 120px 0;scroll-snap-type:none}
@@ -397,43 +417,56 @@ footer svg{flex:0 0 auto}
 
     <div class="duo">
       <figure class="pair reveal">
-        <div class="panels">
-          <div class="panel">
-            <img src="assets/night-a.jpg" alt="一个人的夜晚：窝在沙发上刷手机" width="960" height="1200" loading="lazy">
-            <span class="tag tag-a">一个人</span>
-          </div>
-          <div class="panel">
-            <img src="assets/night-b.jpg" alt="两个人的夜晚：并排坐着打游戏" width="960" height="1200" loading="lazy">
-            <span class="tag tag-b">两个人</span>
-          </div>
-        </div>
-        <figcaption>一个人的夜晚<i>→</i>两个人的夜晚</figcaption>
+        <button class="flip" type="button" aria-pressed="false" aria-label="翻过来看看">
+          <span class="flip-inner">
+            <span class="face front">
+              <img src="assets/night-a.jpg" alt="一个人的夜晚：窝在沙发上刷手机" width="960" height="1200" loading="lazy">
+              <span class="tag">一个人</span>
+            </span>
+            <span class="face back">
+              <img src="assets/night-b.jpg" alt="两个人的夜晚：并排坐着打游戏" width="960" height="1200" loading="lazy">
+              <span class="tag tag-b">两个人</span>
+            </span>
+          </span>
+          <span class="hint-flip">翻过来</span>
+        </button>
+        <figcaption><span class="cap-a">一个人的夜晚</span><span class="cap-b">两个人的夜晚</span></figcaption>
       </figure>
 
       <figure class="pair reveal">
-        <div class="panels">
-          <div class="panel">
-            <img src="assets/meal-a.jpg" alt="一个人的饭：泡面和外卖" width="960" height="1200" loading="lazy">
-            <span class="tag tag-a">一个人</span>
-          </div>
-          <div class="panel">
-            <img src="assets/meal-b.jpg" alt="两个人的饭：一个炒菜一个切菜" width="960" height="1200" loading="lazy">
-            <span class="tag tag-b">两个人</span>
-          </div>
-        </div>
-        <figcaption>一个人的饭<i>→</i>两个人的饭</figcaption>
+        <button class="flip" type="button" aria-pressed="false" aria-label="翻过来看看">
+          <span class="flip-inner">
+            <span class="face front">
+              <img src="assets/meal-a.jpg" alt="一个人的饭：泡面和外卖" width="960" height="1200" loading="lazy">
+              <span class="tag">一个人</span>
+            </span>
+            <span class="face back">
+              <img src="assets/meal-b.jpg" alt="两个人的饭：一个炒菜一个切菜" width="960" height="1200" loading="lazy">
+              <span class="tag tag-b">两个人</span>
+            </span>
+          </span>
+          <span class="hint-flip">翻过来</span>
+        </button>
+        <figcaption><span class="cap-a">一个人的饭</span><span class="cap-b">两个人的饭</span></figcaption>
       </figure>
 
       <figure class="pair reveal">
-        <div class="panels">
-          <div class="panel">
-            <img src="assets/trip-a.jpg" alt="一个人的周末：缩在被子里刷手机" width="960" height="1200" loading="lazy">
-            <span class="tag tag-a">一个人</span>
-          </div>
-          <div class="panel">
-            <img src="assets/trip-b.jpg" alt="两个人的周末：一起出门旅行" width="960" height="1200" loading="lazy">
-            <span class="tag tag-b">两个人</span>
-          </div>
+        <button class="flip" type="button" aria-pressed="false" aria-label="翻过来看看">
+          <span class="flip-inner">
+            <span class="face front">
+              <img src="assets/trip-a.jpg" alt="一个人的周末：缩在被子里刷手机" width="960" height="1200" loading="lazy">
+              <span class="tag">一个人</span>
+            </span>
+            <span class="face back">
+              <img src="assets/trip-b.jpg" alt="两个人的周末：一起出门旅行" width="960" height="1200" loading="lazy">
+              <span class="tag tag-b">两个人</span>
+            </span>
+          </span>
+          <span class="hint-flip">翻过来</span>
+        </button>
+        <figcaption><span class="cap-a">一个人的周末</span><span class="cap-b">两个人的周末</span></figcaption>
+      </figure>
+    </div>
         </div>
         <figcaption>一个人的周末<i>→</i>两个人的周末</figcaption>
       </figure>
@@ -578,6 +611,16 @@ footer svg{flex:0 0 auto}
   });
 
   /* 背景音乐 + 播放器 */
+  /* ---------- 翻面：一个人 → 两个人 ---------- */
+  Array.prototype.forEach.call(document.querySelectorAll('.flip'), function(btn){
+    btn.addEventListener('click', function(){
+      var fig = btn.closest('.pair');
+      var on = fig.classList.toggle('on');
+      fig.classList.add('touched');
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+  });
+
   var bgm = document.getElementById('bgm');
   var musicBtn = document.getElementById('music');
   var playerEl = document.getElementById('player');
