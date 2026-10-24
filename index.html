@@ -236,22 +236,47 @@ footer{
 footer .hand{font-family:var(--handen);font-size:19px;letter-spacing:0;color:var(--rose)}
 footer svg{flex:0 0 auto}
 
-/* ---------- 音乐播放器 ---------- */
-.player{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));display:flex;flex-direction:column;align-items:flex-end;gap:10px;z-index:40}
-.p-card{width:224px;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:10px;padding:12px 14px 9px;box-shadow:0 12px 30px rgba(45,42,38,.14);opacity:0;transform:translateY(8px) scale(.98);pointer-events:none;transition:opacity .35s ease,transform .35s ease}
-.player.open .p-card{opacity:1;transform:none;pointer-events:auto}
-.p-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:7px}
-.p-title{font-size:12px;letter-spacing:.06em;color:var(--ink)}
-.p-artist{font-size:10px;letter-spacing:.1em;color:var(--faint)}
-.p-lyric{margin:0 0 9px;font-size:12px;line-height:1.62;color:var(--rose);height:2.7em;overflow:hidden}
-.p-bar{height:2px;background:#E8DDC8;border-radius:2px;overflow:hidden}
-.p-bar i{display:block;height:100%;width:0;background:var(--rose);transition:width .3s linear}
-.p-time{display:flex;justify-content:space-between;font-size:9px;letter-spacing:.08em;color:var(--faint);margin-top:5px}
-.player-btn{width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.9);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted2);box-shadow:0 6px 18px rgba(45,42,38,.12);transition:color .3s ease,transform .3s ease}
-.player-btn.on{color:var(--rose);border-color:#E6CFC0}
+/* ---------- 音乐：不占版面 · 底部歌词 ---------- */
+.player{position:fixed;right:16px;bottom:calc(18px + env(safe-area-inset-bottom));z-index:42}
+.player-btn{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);
+  background:rgba(255,255,255,.82);backdrop-filter:blur(6px);display:flex;align-items:center;
+  justify-content:center;cursor:pointer;color:var(--muted2);box-shadow:0 5px 16px rgba(45,42,38,.10);
+  transition:color .35s ease,transform .35s ease,opacity .35s ease,border-color .35s ease}
+.player-btn.on{color:var(--rose);border-color:#E6CFC0;opacity:.5}
+.player-btn.on:hover{opacity:1}
 .player-btn.hint{animation:pulse 2.6s ease-in-out infinite}
 .player-btn.on.hint{animation:none}
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+
+/* 底部一条极细进度线，不挡内容 */
+.play-bar{position:fixed;left:0;right:0;bottom:0;height:2px;z-index:41;
+  background:rgba(45,42,38,.06);opacity:0;transition:opacity .6s ease}
+.play-bar.on{opacity:1}
+.play-bar i{display:block;height:100%;width:0;
+  background:linear-gradient(90deg,#E8CFC0,var(--rose));transition:width .35s linear}
+
+/* 歌词条：自己冒出来，停一会自己收回去 */
+.lyric-bar{position:fixed;left:50%;bottom:74px;transform:translate(-50%,12px);z-index:40;
+  max-width:min(86vw,440px);text-align:center;pointer-events:none;opacity:0;
+  transition:opacity .7s ease,transform .7s cubic-bezier(.22,.61,.36,1)}
+.lyric-bar.show{opacity:1;transform:translate(-50%,0)}
+.lb-inner{background:rgba(255,252,246,.9);backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.7);border-radius:13px;padding:11px 20px 12px;
+  box-shadow:0 12px 34px rgba(45,42,38,.14)}
+.lb-title{display:block;font-size:10px;letter-spacing:.22em;color:#8A7F72;margin-bottom:6px}
+.lb-line{display:block;font-size:15.5px;line-height:1.6;color:#2D2A26;
+  font-family:var(--serif);letter-spacing:.02em}
+.lb-line.swap{animation:lbIn .8s cubic-bezier(.22,.61,.36,1) both}
+@keyframes lbIn{from{opacity:0;transform:translateY(9px);filter:blur(3px)}
+  to{opacity:1;transform:none;filter:blur(0)}}
+
+/* 自动播放被拦时的提示 */
+.music-nudge{position:fixed;left:50%;bottom:34px;transform:translate(-50%,8px);z-index:43;
+  font-size:11px;letter-spacing:.18em;color:#7A6A56;background:rgba(255,255,255,.92);
+  border:1px solid var(--line);border-radius:999px;padding:7px 15px;cursor:pointer;
+  box-shadow:0 6px 18px rgba(45,42,38,.12);opacity:0;pointer-events:none;
+  transition:opacity .5s ease,transform .5s ease}
+.music-nudge.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
 
 /* ---------- 入场 ---------- */
 .reveal{transition:opacity .9s cubic-bezier(.22,.61,.36,1),transform .9s cubic-bezier(.22,.61,.36,1)}
@@ -296,13 +321,16 @@ footer svg{flex:0 0 auto}
   .postcard{padding-bottom:124px}
   .postcard-card{max-width:380px}
   footer{padding:32px 120px 42px;font-size:12px}
-  .player{right:28px;bottom:28px}
-  .player-btn{width:50px;height:50px}
+  .player{right:28px;bottom:30px}
+  .player-btn{width:44px;height:44px}
+  .lyric-bar{bottom:96px}
+  .lb-line{font-size:17px}
+  .music-nudge{bottom:44px}
 }
 
 @media (prefers-reduced-motion:reduce){
   .js .reveal{opacity:1;transform:none;transition:none}
-  .scroll-hint svg,.player-btn.hint,.secret.show{animation:none}
+  .scroll-hint svg,.player-btn.hint,.secret.show,.lb-line.swap{animation:none}
   *{scroll-behavior:auto!important}
 }
 </style>
@@ -507,20 +535,22 @@ footer svg{flex:0 0 auto}
 </footer>
 
 <div class="player" id="player">
-  <div class="p-card" id="pCard">
-    <div class="p-top"><span class="p-title">可爱女人</span><span class="p-artist">周杰伦</span></div>
-    <p class="p-lyric" id="pLyric">点一下开始</p>
-    <div class="p-bar"><i id="pProgress"></i></div>
-    <div class="p-time"><span id="pNow">0:00</span><span id="pDur">--:--</span></div>
-  </div>
   <button class="player-btn hint" id="music" aria-label="播放背景音乐" aria-pressed="false">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path d="M9 18V6.4l9-2v11.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
       <circle cx="6.6" cy="18.2" r="2.6" stroke="currentColor" stroke-width="1.6"/>
       <circle cx="15.6" cy="15.8" r="2.6" stroke="currentColor" stroke-width="1.6"/>
     </svg>
   </button>
 </div>
+<div class="play-bar" id="playBar"><i id="playFill"></i></div>
+<div class="lyric-bar" id="lyricBar" aria-hidden="true">
+  <div class="lb-inner">
+    <span class="lb-title">可爱女人 · 周杰伦</span>
+    <span class="lb-line" id="lbLine"></span>
+  </div>
+</div>
+<button class="music-nudge" id="musicNudge">轻触开启音乐</button>
 
 
   <div class="vmodal" id="vmodal" aria-hidden="true">
@@ -572,11 +602,6 @@ footer svg{flex:0 0 auto}
 
   var bgm = document.getElementById('bgm');
   var musicBtn = document.getElementById('music');
-  var playerEl = document.getElementById('player');
-  var pLyric = document.getElementById('pLyric');
-  var pProgress = document.getElementById('pProgress');
-  var pNow = document.getElementById('pNow');
-  var pDur = document.getElementById('pDur');
   var TARGET = 0.38, fadeTimer = null;
   bgm.volume = 0;
 
@@ -655,11 +680,58 @@ footer svg{flex:0 0 auto}
     }, 40);
   }
 
+  var lyricBar = document.getElementById('lyricBar');
+  var lbLine = document.getElementById('lbLine');
+  var playBar = document.getElementById('playBar');
+  var playFill = document.getElementById('playFill');
+  var musicNudge = document.getElementById('musicNudge');
+  var lyricTimer = null, userPaused = false, musicStarted = false;
+
+  function showLyric(text){
+    lbLine.textContent = text;
+    lyricBar.classList.add('show');
+    lbLine.classList.remove('swap');
+    void lbLine.offsetWidth;
+    lbLine.classList.add('swap');
+    clearTimeout(lyricTimer);
+    lyricTimer = setTimeout(function(){ lyricBar.classList.remove('show'); }, 4200);
+  }
+  function hideLyric(){
+    lyricBar.classList.remove('show');
+    clearTimeout(lyricTimer);
+  }
+  function markPlaying(){
+    musicStarted = true;
+    musicBtn.classList.add('on');
+    musicBtn.classList.remove('hint');
+    musicBtn.setAttribute('aria-pressed','true');
+    playBar.classList.add('on');
+    musicNudge.classList.remove('show');
+  }
+  function startMusic(){
+    userPaused = false;
+    bgm.volume = 0;
+    var p = bgm.play();
+    if (p && p.then) {
+      p.then(function(){ markPlaying(); fadeTo(TARGET); })
+       .catch(function(){ markPlaying(); });
+    }
+    fadeTo(TARGET);
+    markPlaying();
+  }
+  function pauseMusic(){
+    userPaused = true;
+    fadeTo(0, function(){ bgm.pause(); });
+    lastSlot = -2;
+    musicBtn.classList.remove('on');
+    musicBtn.setAttribute('aria-pressed','false');
+    playBar.classList.remove('on');
+    hideLyric();
+  }
+
   function updatePlayer() {
     var dur = bgm.duration || 0;
-    pNow.textContent = fmtTime(bgm.currentTime);
-    pDur.textContent = dur ? fmtTime(dur) : '--:--';
-    pProgress.style.width = dur ? (bgm.currentTime / dur * 100) + '%' : '0%';
+    playFill.style.width = dur ? (bgm.currentTime / dur * 100) + '%' : '0%';
     if (!dur) return;
     var t = bgm.currentTime, idx = -1;
     for (var i = 0; i < LYRICS.length; i++) {
@@ -667,7 +739,7 @@ footer svg{flex:0 0 auto}
     }
     if (idx !== lastSlot) {
       lastSlot = idx;
-      pLyric.textContent = lyricAt(t);
+      if (musicStarted) { showLyric(lyricAt(t)); }
     }
   }
   bgm.addEventListener('playing', function(){
@@ -677,32 +749,29 @@ footer svg{flex:0 0 auto}
   bgm.addEventListener('loadedmetadata', updatePlayer);
 
   musicBtn.addEventListener('click', function(){
-    if (bgm.paused) {
-      bgm.volume = 0;
-      var p = bgm.play();
-      if (p && p.catch) {
-        p.catch(function(){
-          playerEl.classList.remove('open');
-          musicBtn.classList.remove('on');
-          musicBtn.setAttribute('aria-pressed', 'false');
-          bgm.volume = 0;
-        });
-      }
-      /* 立刻给反馈，不等音频缓冲完 */
-      fadeTo(TARGET);
-      playerEl.classList.add('open');
-      musicBtn.classList.add('on');
-      musicBtn.classList.remove('hint');
-      musicBtn.setAttribute('aria-pressed', 'true');
-      updatePlayer();
-    } else {
-      fadeTo(0, function(){ bgm.pause(); });
-      lastSlot = -2;
-      playerEl.classList.remove('open');
-      musicBtn.classList.remove('on');
-      musicBtn.setAttribute('aria-pressed', 'false');
-    }
+    if (bgm.paused) { startMusic(); } else { pauseMusic(); }
   });
+
+  /* 进页面就尝试自动播放；被浏览器拦下时，等她第一次点屏幕 */
+  (function autoplay(){
+    bgm.volume = 0;
+    var p = bgm.play();
+    if (p && p.then) {
+      p.then(function(){ markPlaying(); fadeTo(TARGET); })
+       .catch(function(){
+         musicNudge.classList.add('show');
+         var once = function(){
+           document.removeEventListener('pointerdown', once);
+           if (!userPaused && bgm.paused) { startMusic(); }
+         };
+         document.addEventListener('pointerdown', once);
+       });
+    }
+  })();
+  musicNudge.addEventListener('click', function(){ startMusic(); });
+
+  /* 她在滑内容的时候，歌词先让路 */
+  window.addEventListener('scroll', function(){ hideLyric(); }, { passive: true });
 
   /* 吹蜡烛 */
   var candle = document.getElementById('candle');
@@ -727,11 +796,13 @@ footer svg{flex:0 0 auto}
     document.body.style.overflow = '';
     try { blowVideo.pause(); } catch(_) {}
     if (!bgm.paused) { fadeTo(TARGET); }
+    if (musicStarted) { showLyric(lyricAt(bgm.currentTime)); }
     revealSecret();
   }
   function openVideo(){
     vmodal.classList.add('open');
     vmodal.setAttribute('aria-hidden','false');
+    hideLyric();
     document.body.style.overflow = 'hidden';
     if (!bgm.paused) { fadeTo(0.05); }
     var pr = blowVideo.play();
