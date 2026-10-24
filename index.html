@@ -140,22 +140,23 @@ h2{
 }
 .hand-cap{font-family:var(--handen);font-size:20px;color:var(--rose)}
 
-/* ---------- 瞬间 ---------- */
+/* ---------- 瞬间 · 拖拽对比 ---------- */
 .moments{display:flex;flex-direction:column;gap:22px;padding:0 0 76px}
 .more{margin:24px 0 0;padding:0 var(--pad);font-size:14.5px;line-height:1.9;color:var(--muted2);text-align:center;letter-spacing:.04em}
 .moments .head{padding:0 var(--pad)}
-.duo{display:grid;grid-template-columns:1fr;gap:36px;padding:8px var(--pad) 2px;max-width:900px;margin:0 auto}
-.pair{margin:0;display:flex;flex-direction:column;gap:11px}
+.duo{display:grid;grid-template-columns:1fr;gap:40px;padding:18px var(--pad) 2px;max-width:900px;margin:0 auto}
+.pair{margin:0;display:flex;flex-direction:column;gap:12px}
 .panels{display:grid;grid-template-columns:1fr 1fr;gap:11px}
-.panel{position:relative;overflow:hidden;border-radius:3px;background:#F2EBDC;aspect-ratio:1024/1296;
-  box-shadow:0 1px 0 rgba(45,42,38,.05),0 8px 20px rgba(45,42,38,.06)}
+.panel{position:relative;overflow:hidden;border-radius:5px;background:#F2EBDC;aspect-ratio:4/5;
+  box-shadow:0 8px 22px rgba(45,42,38,.08)}
 .panel img{width:100%;height:100%;object-fit:cover;display:block}
-.panel .tag{position:absolute;left:9px;bottom:9px;font-size:10px;letter-spacing:.14em;
-  padding:4px 10px;border-radius:99px;white-space:nowrap;
-  background:rgba(255,255,255,.94);color:#6E6862;box-shadow:0 2px 8px rgba(45,42,38,.1)}
-.panel .tag-b{background:var(--rose);color:#FFF6EC}
-.pair figcaption{font-size:13.5px;letter-spacing:.05em;color:#A07856;text-align:center}
-.pair figcaption i{font-style:normal;margin:0 7px;color:#C9B79B}
+.panel .tag{position:absolute;top:10px;font-size:10px;letter-spacing:.14em;padding:4px 10px;
+  border-radius:99px;white-space:nowrap;background:rgba(255,255,255,.92);color:#6E6862;
+  box-shadow:0 2px 8px rgba(45,42,38,.1)}
+.panel .tag-a{left:10px}
+.panel .tag-b{right:10px;background:var(--rose);color:#FFF6EC}
+.pair figcaption{font-size:14px;letter-spacing:.06em;color:#A07856;text-align:center;line-height:1.7;margin:0}
+.pair figcaption i{font-style:normal;margin:0 6px;color:#C9A98B}
 
 /* ---------- 引言 ---------- */
 .quote{background:var(--band);padding:54px var(--pad) 54px;text-align:center}
@@ -277,11 +278,8 @@ footer svg{flex:0 0 auto}
   .closing{font-size:26px;margin-top:40px}
   .film{padding-bottom:124px}
   .moments{padding-bottom:124px}
-  .duo{gap:66px;padding:14px 120px 2px}
-  .panels{gap:18px}
-  .pair figcaption{font-size:13.5px}
-  .panel .tag{font-size:10.5px;padding:5px 12px;left:12px;bottom:12px}
-  .moment-note{font-size:13.5px}
+  .duo{grid-template-columns:repeat(3,1fr);gap:26px;padding:28px 120px 2px;max-width:none}
+  .pair figcaption{font-size:14px}
   .more{margin-top:34px;font-size:16px}
   .strip{overflow:visible;justify-content:center;gap:34px;padding:10px 120px 0;scroll-snap-type:none}
   .card{flex:0 0 344px}
@@ -400,43 +398,43 @@ footer svg{flex:0 0 auto}
       <figure class="pair reveal">
         <div class="panels">
           <div class="panel">
-            <img src="assets/cup-a.jpg" alt="一个人的早晨：桌上一只咖啡杯" width="1024" height="1296" loading="lazy">
-            <span class="tag">一个人</span>
+            <img src="assets/night-a.jpg" alt="一个人的夜晚：窝在沙发上刷手机" width="960" height="1200" loading="lazy">
+            <span class="tag tag-a">一个人</span>
           </div>
           <div class="panel">
-            <img src="assets/cup-b.jpg" alt="两个人的早晨：桌上有两只咖啡杯" width="1024" height="1296" loading="lazy">
+            <img src="assets/night-b.jpg" alt="两个人的夜晚：并排坐着打游戏" width="960" height="1200" loading="lazy">
             <span class="tag tag-b">两个人</span>
           </div>
         </div>
-        <figcaption>一个人的早晨<i>→</i>两个人的早晨</figcaption>
+        <figcaption>一个人的夜晚<i>→</i>两个人的夜晚</figcaption>
       </figure>
 
       <figure class="pair reveal">
         <div class="panels">
           <div class="panel">
-            <img src="assets/shoe-a.jpg" alt="一个人的门口：一双鞋" width="1024" height="1296" loading="lazy">
-            <span class="tag">一个人</span>
+            <img src="assets/meal-a.jpg" alt="一个人的饭：泡面和外卖" width="960" height="1200" loading="lazy">
+            <span class="tag tag-a">一个人</span>
           </div>
           <div class="panel">
-            <img src="assets/shoe-b.jpg" alt="两个人的门口：两双鞋" width="1024" height="1296" loading="lazy">
-            <span class="tag tag-b">两个人</span>
-          </div>
-        </div>
-        <figcaption>一个人的门口<i>→</i>两个人的门口</figcaption>
-      </figure>
-
-      <figure class="pair reveal">
-        <div class="panels">
-          <div class="panel">
-            <img src="assets/chop-a.jpg" alt="一个人的饭：一碗饭一副筷子" width="1024" height="1296" loading="lazy">
-            <span class="tag">一个人</span>
-          </div>
-          <div class="panel">
-            <img src="assets/chop-b.jpg" alt="两个人的饭：两碗饭两副筷子" width="1024" height="1296" loading="lazy">
+            <img src="assets/meal-b.jpg" alt="两个人的饭：一个炒菜一个切菜" width="960" height="1200" loading="lazy">
             <span class="tag tag-b">两个人</span>
           </div>
         </div>
         <figcaption>一个人的饭<i>→</i>两个人的饭</figcaption>
+      </figure>
+
+      <figure class="pair reveal">
+        <div class="panels">
+          <div class="panel">
+            <img src="assets/trip-a.jpg" alt="一个人的周末：缩在被子里刷手机" width="960" height="1200" loading="lazy">
+            <span class="tag tag-a">一个人</span>
+          </div>
+          <div class="panel">
+            <img src="assets/trip-b.jpg" alt="两个人的周末：一起出门旅行" width="960" height="1200" loading="lazy">
+            <span class="tag tag-b">两个人</span>
+          </div>
+        </div>
+        <figcaption>一个人的周末<i>→</i>两个人的周末</figcaption>
       </figure>
     </div>
 
@@ -557,6 +555,8 @@ footer svg{flex:0 0 auto}
       });
     }, 2600);
   }
+
+  /* 拖拽对比 */
 
   /* 视频 */
   var film = document.getElementById('film');
