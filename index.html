@@ -145,17 +145,31 @@ h2{
 .more{margin:24px 0 0;padding:0 var(--pad);font-size:14.5px;line-height:1.9;color:var(--muted2);text-align:center;letter-spacing:.04em}
 .more-hand{margin:7px 0 0;padding:0 var(--pad);font-family:var(--handcn);font-weight:400;font-size:clamp(19px,4.8vw,25px);line-height:1.55;color:var(--rose);text-align:center;letter-spacing:.02em;white-space:nowrap}
 .moments .head{padding:0 var(--pad)}
-.strip{
-  display:flex;gap:14px;overflow-x:auto;padding:6px var(--pad) 12px;
-  scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
+.duo{display:grid;grid-template-columns:1fr;gap:30px;padding:8px var(--pad) 2px}
+.pair{margin:0;display:flex;flex-direction:column;gap:13px}
+.stack{
+  position:relative;width:100%;aspect-ratio:79/100;overflow:hidden;border-radius:3px;
+  background:#F2EBDC;cursor:ew-resize;touch-action:pan-y;
+  user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;
 }
-.strip::-webkit-scrollbar{height:0}
-.card{
-  flex:0 0 76%;scroll-snap-align:center;background:#fff;padding:12px 12px 2px;
-  box-shadow:0 12px 28px rgba(45,42,38,.10);
-}
-.card img{width:100%;aspect-ratio:79/100;object-fit:cover}
-.card figcaption{font-family:var(--handen);font-size:18px;color:#8C7B66;text-align:center;padding:8px 2px}
+.stack>img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+.drawn{position:absolute;inset:0;pointer-events:none;clip-path:inset(0 calc(100% - var(--split,50%)) 0 0)}
+.drawn svg{width:100%;height:100%;display:block}
+.split-line{position:absolute;top:0;bottom:0;left:var(--split,50%);width:1px;
+  background:rgba(255,255,255,.8);box-shadow:0 0 12px rgba(255,255,255,.55);pointer-events:none}
+.knob{position:absolute;top:50%;left:var(--split,50%);transform:translate(-50%,-50%);
+  width:40px;height:40px;border-radius:50%;background:rgba(250,246,240,.95);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 14px rgba(45,42,38,.22);pointer-events:none}
+.tags{position:absolute;left:0;right:0;bottom:11px;display:flex;justify-content:space-between;
+  padding:0 11px;pointer-events:none}
+.tag{font-size:11px;letter-spacing:.16em;padding:5px 11px;border-radius:99px;white-space:nowrap;transition:opacity .25s ease}
+.tag-a{background:rgba(250,246,240,.9);color:#8A7F72}
+.tag-b{background:var(--rose);color:#FFF6EC}
+.pair figcaption{font-size:13.5px;letter-spacing:.05em;color:#A07856;text-align:center}
+.pair figcaption i{font-style:normal;margin:0 7px;color:#C9B79B}
+.moment-note{margin:26px 0 0;padding:0 var(--pad);font-size:12.5px;line-height:1.9;
+  color:#A89B8C;text-align:center;letter-spacing:.03em}
 
 /* ---------- 引言 ---------- */
 .quote{background:var(--band);padding:54px var(--pad) 54px;text-align:center}
@@ -277,6 +291,8 @@ footer svg{flex:0 0 auto}
   .closing{font-size:26px;margin-top:40px}
   .film{padding-bottom:124px}
   .moments{padding-bottom:124px}
+  .duo{grid-template-columns:1fr 1fr;gap:34px;padding:10px 120px 2px}
+  .moment-note{font-size:13.5px}
   .more{margin-top:34px;font-size:16px}
   .more-hand{margin-top:10px;font-size:26px}
   .strip{overflow:visible;justify-content:center;gap:34px;padding:10px 120px 0;scroll-snap-type:none}
@@ -389,23 +405,53 @@ footer svg{flex:0 0 auto}
   <section class="moments">
     <div class="head reveal" style="gap:12px">
       <p class="chapter">CHAPTER FOUR · MOMENTS</p>
-      <h2>这些瞬间没有滤镜</h2>
-      <p class="sec-sub">不是重要的日子，是想起来会笑的那些。</p>
+      <h2>这些瞬间，本来只有一个人</h2>
+      <p class="sec-sub">把中间那条线往右拖，右边就多出一个人。</p>
     </div>
-    <div class="strip reveal">
-      <figure class="card">
-        <img src="assets/moment-1.jpg" alt="生日蛋糕上的蜡烛" width="316" height="400" loading="lazy">
-        <figcaption>one candle is enough</figcaption>
+
+    <div class="duo">
+      <figure class="pair reveal">
+        <div class="stack" style="--split:50%">
+          <img src="assets/moment-1.jpg" alt="生日蛋糕上的一根蜡烛" width="316" height="400" loading="lazy">
+          <div class="drawn"><svg viewBox="0 0 316 400" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <g stroke="#B5695E" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M178 206.6c.2-9.6.5-19.6.7-28.6.1-5.2.1-8 .1-9.4 0-2.4 1.2-3.7 2.6-3.7s2.5 1.3 2.5 3.7c0 1.4 0 4.2.1 9.4.2 9 .5 19 .7 28.6" fill="#FFF8EC" fill-opacity=".62"/>
+            <path d="M181.4 168.6v-3.4"/>
+            <path d="M181.4 164.9c-4.2-4.5-3.6-11.2.1-15.6 3.9 4.8 4.3 11.2-.1 15.6Z" fill="#F7B98F" fill-opacity=".8"/>
+            <path d="M178.9 190.6c-.6 2.8-.6 5.2-.2 7"/>
+            <path d="M176.8 207.8c2.6 1.8 7.5 1.7 10.1-.1"/>
+          </g>
+        </svg></div>
+          <div class="split-line"></div>
+          <div class="knob"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 4.6 3.4 9l3.6 4.4M11 4.6 14.6 9 11 13.4" stroke="#B5695E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="tags"><span class="tag tag-a">一个人</span><span class="tag tag-b" style="opacity:0">两个人</span></div>
+        </div>
+        <figcaption>一根蜡烛<i>→</i>两根蜡烛</figcaption>
       </figure>
-      <figure class="card">
-        <img src="assets/moment-2.jpg" alt="干玫瑰与手写便签" width="316" height="404" loading="lazy">
-        <figcaption>you left this on my desk</figcaption>
-      </figure>
-      <figure class="card">
-        <img src="assets/moment-3.jpg" alt="窗边的两只咖啡杯" width="316" height="396" loading="lazy">
-        <figcaption>two cups, one morning</figcaption>
+
+      <figure class="pair reveal">
+        <div class="stack" style="--split:50%">
+          <img src="assets/moment-2.jpg" alt="干玫瑰与一张手写便签" width="316" height="400" loading="lazy">
+          <div class="drawn"><svg viewBox="0 0 316 400" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <g stroke="#B5695E" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M173 302c24-8 62-20 96-31 5.6-1.8 8.4-.4 9.8 4.8 4.2 15.6 8.4 31 12.6 46.4 1.4 5.2-.4 7.8-5.8 9.4-30 8.6-62 17-92 24.6-5.4 1.4-8.2-.2-9.6-5.4-4-15.4-8-30.6-12-46-1.4-5.2.2-7.8 5.6-9.4Z" fill="#FFF6EC" fill-opacity=".58"/>
+            <path d="M173.4 302.4c33-3 68-9.6 99-18.4"/>
+            <path d="M187 318c18-3.4 42-8.6 60-13.4"/>
+            <path d="M191 333c18-3.6 40-9 57-14"/>
+            <path d="M195 348c16-3.6 36-8.6 52-13.6"/>
+            <path d="M199 361c12-2.8 26-6.2 38-9.6"/>
+          </g>
+        </svg></div>
+          <div class="split-line"></div>
+          <div class="knob"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 4.6 3.4 9l3.6 4.4M11 4.6 14.6 9 11 13.4" stroke="#B5695E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="tags"><span class="tag tag-a">一个人</span><span class="tag tag-b" style="opacity:0">两个人</span></div>
+        </div>
+        <figcaption>一张便签<i>→</i>两张便签</figcaption>
       </figure>
     </div>
+
+    <p class="moment-note reveal">右边那些，是先用笔补上的。等你们的照片到了，我再换成真的。</p>
+
     <p class="more reveal">未来还有很多个时刻，期待和你一起探索</p>
     <p class="more-hand reveal">一年四季，一日三餐，<br>平平淡淡，喜乐安康。</p>
   </section>
@@ -544,6 +590,35 @@ footer svg{flex:0 0 auto}
   });
 
   /* 背景音乐 + 播放器 */
+  /* ---------- 单双人对折 ---------- */
+  Array.prototype.forEach.call(document.querySelectorAll('.stack'), function(st){
+    var dragging = false;
+    function moveTo(clientX){
+      var r = st.getBoundingClientRect();
+      if (!r.width) return;
+      var p = (clientX - r.left) / r.width * 100;
+      p = Math.max(3, Math.min(97, p));
+      st.style.setProperty('--split', p.toFixed(2) + '%');
+      var a = st.querySelector('.tag-a'), b = st.querySelector('.tag-b');
+      if (a) a.style.opacity = Math.max(0, Math.min(1, (74 - p) / 24)).toFixed(2);
+      if (b) b.style.opacity = Math.max(0, Math.min(1, (p - 50) / 24)).toFixed(2);
+    }
+    st.addEventListener('pointerdown', function(e){
+      dragging = true;
+      try { st.setPointerCapture(e.pointerId); } catch(_) {}
+      moveTo(e.clientX);
+      e.preventDefault();
+    });
+    st.addEventListener('pointermove', function(e){
+      if (dragging) moveTo(e.clientX);
+    });
+    st.addEventListener('pointerup', function(e){
+      dragging = false;
+      try { st.releasePointerCapture(e.pointerId); } catch(_) {}
+    });
+    st.addEventListener('pointercancel', function(){ dragging = false; });
+  });
+
   var bgm = document.getElementById('bgm');
   var musicBtn = document.getElementById('music');
   var playerEl = document.getElementById('player');
