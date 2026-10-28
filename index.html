@@ -299,7 +299,32 @@ footer .hand{font-family:var(--handen);font-size:19px;letter-spacing:0;color:var
 footer svg{flex:0 0 auto}
 
 /* ---------- 音乐：不占版面 · 底部歌词 ---------- */
-.player{position:fixed;right:16px;bottom:calc(18px + env(safe-area-inset-bottom));z-index:42}
+.player{position:fixed;right:16px;bottom:calc(18px + env(safe-area-inset-bottom));z-index:42;
+  display:flex;align-items:center;gap:8px}
+.player .player-btn{position:relative}
+/* 切歌按钮：手机没有 hover，必须常驻可见（用低透明度表示"次要"） */
+.swap-btn{width:38px;height:38px;opacity:.42;pointer-events:auto;
+  transition:opacity .4s ease,transform .4s ease,color .35s ease}
+.player:hover .swap-btn,.swap-btn:focus-visible{opacity:.8}
+.swap-btn:hover{opacity:1;color:var(--rose)}
+/* 曲目列表：从播放器上方弹出 */
+.track-list{
+  position:absolute;right:0;bottom:52px;display:flex;flex-direction:column;gap:6px;
+  opacity:0;transform:translateY(8px) scale(.97);pointer-events:none;
+  transition:opacity .35s ease,transform .35s cubic-bezier(.22,.61,.36,1);
+}
+.track-list.show{opacity:1;transform:none;pointer-events:auto}
+.track-item{
+  display:flex;flex-direction:column;align-items:flex-end;gap:1px;white-space:nowrap;
+  background:rgba(255,252,246,.94);backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.75);border-radius:11px;padding:8px 14px;cursor:pointer;
+  box-shadow:0 10px 26px rgba(45,42,38,.13);font-family:var(--serif);
+  transition:border-color .3s ease,transform .3s ease}
+.track-item b{font-size:13px;font-weight:600;color:var(--ink);letter-spacing:.02em}
+.track-item i{font-size:9.5px;font-style:normal;letter-spacing:.18em;color:var(--muted2)}
+.track-item.cur{border-color:#E6CFC0}
+.track-item.cur b{color:var(--rose)}
+.track-item:hover{transform:translateX(-3px)}
 .player-btn{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);
   background:rgba(255,255,255,.82);backdrop-filter:blur(6px);display:flex;align-items:center;
   justify-content:center;cursor:pointer;color:var(--muted2);box-shadow:0 5px 16px rgba(45,42,38,.10);
@@ -318,7 +343,7 @@ footer svg{flex:0 0 auto}
   background:linear-gradient(90deg,#E8CFC0,var(--rose));transition:width .35s linear}
 
 /* 歌词条：自己冒出来，停一会自己收回去 */
-.lyric-bar{position:fixed;left:50%;bottom:74px;transform:translate(-50%,12px);z-index:40;
+.lyric-bar{position:fixed;left:50%;bottom:132px;transform:translate(-50%,12px);z-index:40;
   max-width:min(86vw,440px);text-align:center;pointer-events:none;opacity:0;
   transition:opacity .7s ease,transform .7s cubic-bezier(.22,.61,.36,1)}
 .lyric-bar.show{opacity:1;transform:translate(-50%,0)}
@@ -389,7 +414,9 @@ footer svg{flex:0 0 auto}
   footer{padding:32px 120px 42px;font-size:12px}
   .player{right:28px;bottom:30px}
   .player-btn{width:44px;height:44px}
-  .lyric-bar{bottom:96px}
+  .swap-btn{width:40px;height:40px;opacity:.32}
+  .player:hover .swap-btn{opacity:.72}
+  .lyric-bar{bottom:150px}
   .lb-line{font-size:17px}
   .music-nudge{bottom:44px}
 }
@@ -644,6 +671,16 @@ footer svg{flex:0 0 auto}
 </footer>
 
 <div class="player" id="player">
+  <div class="track-list" id="trackList" aria-hidden="true">
+    <button class="track-item" data-track="0"><b>可爱女人</b><i>周杰伦</i></button>
+    <button class="track-item" data-track="1"><b>初见</b><i>乐乐</i></button>
+  </div>
+  <button class="player-btn swap-btn" id="swap" aria-label="切换歌曲">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M4 8.5h13.2M14 5.2l3.4 3.3-3.4 3.3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M20 15.5H6.8M10 12.2 6.6 15.5 10 18.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
   <button class="player-btn hint" id="music" aria-label="播放背景音乐" aria-pressed="false">
     <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path d="M9 18V6.4l9-2v11.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
@@ -655,7 +692,7 @@ footer svg{flex:0 0 auto}
 <div class="play-bar" id="playBar"><i id="playFill"></i></div>
 <div class="lyric-bar" id="lyricBar" aria-hidden="true">
   <div class="lb-inner">
-    <span class="lb-title">可爱女人 · 周杰伦</span>
+    <span class="lb-title" id="lbTitle">可爱女人 · 周杰伦</span>
     <span class="lb-line" id="lbLine"></span>
   </div>
 </div>
@@ -672,6 +709,7 @@ footer svg{flex:0 0 auto}
   </div>
 <canvas id="confetti"></canvas>
 <audio id="bgm" src="assets/bgm.mp3" loop preload="none"></audio>
+<audio id="bgm2" src="assets/bgm2.mp3" loop preload="none"></audio>
 
 <script>
 (function(){
@@ -709,10 +747,20 @@ footer svg{flex:0 0 auto}
     });
   });
 
-  var bgm = document.getElementById('bgm');
+  var audioEls = [document.getElementById('bgm'), document.getElementById('bgm2')];
+  var TRACKS = [
+    { name: '可爱女人', artist: '周杰伦', el: audioEls[0], lyrics: null, title: '可爱女人 · 周杰伦' },
+    { name: '初见',     artist: '乐乐',   el: audioEls[1], lyrics: null, title: '初见 · 乐乐' }
+  ];
+  var curTrack = 0;
+  var bgm = TRACKS[0].el;
   var musicBtn = document.getElementById('music');
+  var swapBtn = document.getElementById('swap');
+  var trackList = document.getElementById('trackList');
+  var lbTitle = document.getElementById('lbTitle');
   var TARGET = 0.38, fadeTimer = null;
   bgm.volume = 0;
+  audioEls[1].volume = 0;
 
   var LYRICS = [
     [29.81, '想要有直升机'],
@@ -764,12 +812,62 @@ footer svg{flex:0 0 auto}
     [231.05, '温柔的让我心疼的可爱女人'],
     [234.62, '透明的让我感动的']
   ];
+  var LYRICS2 = [
+    [16.70, '巷口的风停在那一秒'],
+    [20.58, '你抬头对我笑'],
+    [23.32, '阳光刚好落你发梢'],
+    [25.86, '整个世界都安静了'],
+    [29.36, '时间像被按下慢镜头'],
+    [31.94, '心跳声我都听得到'],
+    [34.68, '人群里只看见你'],
+    [38.08, '连呼吸都变温柔'],
+    [40.86, '想把初见的那一天'],
+    [44.28, '折成一封永远的信'],
+    [47.54, '每一笔都写满幸运'],
+    [50.36, '遇见你 是我最美的剧情'],
+    [53.60, '想和你走过每个四季'],
+    [56.96, '从青涩走到白发去'],
+    [60.60, '这条路不管多崎岖'],
+    [63.82, '只要身边是你 都美丽'],
+    [71.38, '后来聊到凌晨的晚安'],
+    [74.54, '话题总说不完'],
+    [77.70, '你说未来还很远'],
+    [79.86, '我却想把计划都写满'],
+    [84.28, '把你的喜好记成习惯'],
+    [86.90, '把每一天都过成浪漫'],
+    [90.10, '不怕路长 不怕夜寒'],
+    [93.50, '有你就有答案'],
+    [96.06, '想把初见的那一天'],
+    [99.40, '折成一封永远的信'],
+    [102.00, '每一笔都写满幸运'],
+    [105.46, '遇见你 是我最美的剧情'],
+    [108.76, '想和你走过每个四季'],
+    [112.26, '从青涩走到白发去'],
+    [115.80, '这条路不管多崎岖'],
+    [119.00, '只要身边是你 都美丽'],
+    [125.44, '也许岁月会慢慢走'],
+    [128.36, '也许故事还有很多关口'],
+    [132.32, '但我握紧你的手'],
+    [135.62, '就什么都不怕走'],
+    [138.18, '从初见的心动 到余生的相守'],
+    [144.70, '这一路 我只为你停留'],
+    [151.22, '想把初见的那一天'],
+    [154.42, '折成一封永远的信'],
+    [157.66, '每一笔都写满幸运'],
+    [160.58, '遇见你 是我最美的剧情'],
+    [164.14, '想和你走过每个四季'],
+    [167.40, '从青涩走到白发去'],
+    [171.14, '这条路不管多崎岖'],
+    [174.00, '只要身边是你 都美丽']
+  ];
   var lastSlot = -2;
 
   function lyricAt(t) {
-    var text = '♪ 可爱女人';
-    for (var i = 0; i < LYRICS.length; i++) {
-      if (t >= LYRICS[i][0]) { text = LYRICS[i][1]; } else { break; }
+    var tr = TRACKS[curTrack];
+    var list = curTrack === 0 ? LYRICS : LYRICS2;
+    var text = '♪ ' + tr.name;
+    for (var i = 0; i < list.length; i++) {
+      if (t >= list[i][0]) { text = list[i][1]; } else { break; }
     }
     return text;
   }
@@ -843,22 +941,76 @@ footer svg{flex:0 0 auto}
     playFill.style.width = dur ? (bgm.currentTime / dur * 100) + '%' : '0%';
     if (!dur) return;
     var t = bgm.currentTime, idx = -1;
-    for (var i = 0; i < LYRICS.length; i++) {
-      if (t >= LYRICS[i][0]) { idx = i; } else { break; }
+    var list = curTrack === 0 ? LYRICS : LYRICS2;
+    for (var i = 0; i < list.length; i++) {
+      if (t >= list[i][0]) { idx = i; } else { break; }
     }
     if (idx !== lastSlot) {
       lastSlot = idx;
       if (musicStarted) { showLyric(lyricAt(t)); }
     }
   }
-  bgm.addEventListener('playing', function(){
-    if (!bgm.paused && bgm.volume < TARGET * 0.9) { fadeTo(TARGET); }
+  audioEls.forEach(function(el){
+    el.addEventListener('playing', function(){
+      if (el !== bgm) return;
+      if (!el.paused && el.volume < TARGET * 0.9) { fadeTo(TARGET); }
+    });
+    el.addEventListener('timeupdate', function(){ if (el === bgm) updatePlayer(); });
+    el.addEventListener('loadedmetadata', function(){ if (el === bgm) updatePlayer(); });
   });
-  bgm.addEventListener('timeupdate', updatePlayer);
-  bgm.addEventListener('loadedmetadata', updatePlayer);
 
   musicBtn.addEventListener('click', function(){
     if (bgm.paused) { startMusic(); } else { pauseMusic(); }
+  });
+
+  /* ---------- 两首歌：换曲 ---------- */
+  function applyTrackUI(){
+    var tr = TRACKS[curTrack];
+    lbTitle.textContent = tr.title;
+    var items = trackList.querySelectorAll('.track-item');
+    for (var i = 0; i < items.length; i++) {
+      items[i].classList.toggle('cur', i === curTrack);
+    }
+  }
+
+  function switchTrack(idx){
+    if (idx === curTrack) { trackList.classList.remove('show'); return; }
+    var wasPlaying = !bgm.paused;
+    var pos = bgm.currentTime;
+    try { bgm.pause(); } catch(_) {}
+    fadeTo(0);
+    curTrack = idx;
+    bgm = TRACKS[curTrack].el;
+    bgm.volume = 0;
+    lastSlot = -2;
+    applyTrackUI();
+    trackList.classList.remove('show');
+    hideLyric();
+    if (wasPlaying) {
+      try { bgm.currentTime = 0; } catch(_) {}
+      var p = bgm.play();
+      if (p && p.then) {
+        p.then(function(){ markPlaying(); fadeTo(TARGET); })
+         .catch(function(){ markPlaying(); fadeTo(TARGET); });
+      } else { markPlaying(); fadeTo(TARGET); }
+    } else {
+      markPlaying();
+      fadeTo(TARGET);
+    }
+  }
+
+  swapBtn.addEventListener('click', function(e){
+    e.stopPropagation();
+    trackList.classList.toggle('show');
+  });
+  trackList.querySelectorAll('.track-item').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      switchTrack(parseInt(btn.getAttribute('data-track'), 10));
+    });
+  });
+  document.addEventListener('click', function(){
+    trackList.classList.remove('show');
   });
 
   /* 进页面就尝试自动播放；被浏览器拦下时，等她第一次点屏幕 */
