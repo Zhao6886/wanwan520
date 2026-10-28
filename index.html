@@ -672,8 +672,8 @@ footer svg{flex:0 0 auto}
 
 <div class="player" id="player">
   <div class="track-list" id="trackList" aria-hidden="true">
-    <button class="track-item" data-track="0"><b>可爱女人</b><i>周杰伦</i></button>
-    <button class="track-item" data-track="1"><b>初见</b><i>乐乐</i></button>
+    <button class="track-item" data-track="0"><b>初见</b><i>乐乐</i></button>
+    <button class="track-item" data-track="1"><b>可爱女人</b><i>周杰伦</i></button>
   </div>
   <button class="player-btn swap-btn" id="swap" aria-label="切换歌曲">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -692,7 +692,7 @@ footer svg{flex:0 0 auto}
 <div class="play-bar" id="playBar"><i id="playFill"></i></div>
 <div class="lyric-bar" id="lyricBar" aria-hidden="true">
   <div class="lb-inner">
-    <span class="lb-title" id="lbTitle">可爱女人 · 周杰伦</span>
+    <span class="lb-title" id="lbTitle">初见 · 乐乐</span>
     <span class="lb-line" id="lbLine"></span>
   </div>
 </div>
@@ -708,8 +708,8 @@ footer svg{flex:0 0 auto}
     </div>
   </div>
 <canvas id="confetti"></canvas>
-<audio id="bgm" src="assets/bgm.mp3" loop preload="none"></audio>
-<audio id="bgm2" src="assets/bgm2.mp3" loop preload="none"></audio>
+<audio id="bgm" src="assets/bgm.mp3" preload="none"></audio>
+<audio id="bgm2" src="assets/bgm2.mp3" preload="none"></audio>
 
 <script>
 (function(){
@@ -749,11 +749,13 @@ footer svg{flex:0 0 auto}
 
   var audioEls = [document.getElementById('bgm'), document.getElementById('bgm2')];
   var TRACKS = [
-    { name: '可爱女人', artist: '周杰伦', el: audioEls[0], lyrics: null, title: '可爱女人 · 周杰伦' },
-    { name: '初见',     artist: '乐乐',   el: audioEls[1], lyrics: null, title: '初见 · 乐乐' }
+    { name: '初见',     artist: '乐乐',   el: audioEls[1], lyrics: null, title: '初见 · 乐乐',       loop: false },
+    { name: '可爱女人', artist: '周杰伦', el: audioEls[0], lyrics: null, title: '可爱女人 · 周杰伦', loop: true  }
   ];
-  var curTrack = 0;
+  var curTrack = 0;                 /* 进页面先放《初见》 */
   var bgm = TRACKS[0].el;
+  bgm.loop = TRACKS[0].loop;
+  audioEls[0].loop = TRACKS[1].loop;
   var musicBtn = document.getElementById('music');
   var swapBtn = document.getElementById('swap');
   var trackList = document.getElementById('trackList');
@@ -957,6 +959,7 @@ footer svg{flex:0 0 auto}
     });
     el.addEventListener('timeupdate', function(){ if (el === bgm) updatePlayer(); });
     el.addEventListener('loadedmetadata', function(){ if (el === bgm) updatePlayer(); });
+    el.addEventListener('ended', function(){ if (el === bgm) handleEnded(); });
   });
 
   musicBtn.addEventListener('click', function(){
@@ -973,14 +976,14 @@ footer svg{flex:0 0 auto}
     }
   }
 
-  function switchTrack(idx){
+  function switchTrack(idx, autoPlay){
     if (idx === curTrack) { trackList.classList.remove('show'); return; }
-    var wasPlaying = !bgm.paused;
-    var pos = bgm.currentTime;
+    var wasPlaying = autoPlay || !bgm.paused;
     try { bgm.pause(); } catch(_) {}
     fadeTo(0);
     curTrack = idx;
     bgm = TRACKS[curTrack].el;
+    bgm.loop = TRACKS[curTrack].loop;
     bgm.volume = 0;
     lastSlot = -2;
     applyTrackUI();
@@ -999,6 +1002,13 @@ footer svg{flex:0 0 auto}
     }
   }
 
+  /* 《初见》唱完 → 自动接上《可爱女人》 */
+  function handleEnded(){
+    if (curTrack !== 0) return;             /* 只有第一首需要续 */
+    if (bgm !== TRACKS[0].el) return;
+    switchTrack(1, true);
+  }
+
   swapBtn.addEventListener('click', function(e){
     e.stopPropagation();
     trackList.classList.toggle('show');
@@ -1012,6 +1022,8 @@ footer svg{flex:0 0 auto}
   document.addEventListener('click', function(){
     trackList.classList.remove('show');
   });
+
+  applyTrackUI();
 
   /* 进页面就尝试自动播放；被浏览器拦下时，等她第一次点屏幕 */
   (function autoplay(){
